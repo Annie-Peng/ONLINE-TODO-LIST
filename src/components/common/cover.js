@@ -1,6 +1,6 @@
-import logo from "./img/cover/logo.png";
-import coverPic from "./img/cover/coverPic.png";
-import coverPic2 from "./img/cover/coverPic2.png";
+import logo from "../../images/cover/logo.png";
+import coverPic from "../../images/cover/coverPic.png";
+import coverPic2 from "../../images/cover/coverPic2.png";
 
 function Logo({ width, height }) {
   return (

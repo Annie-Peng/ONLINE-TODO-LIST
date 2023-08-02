@@ -1,6 +1,6 @@
 import { useState } from "react";
-import MainBtn from "./btn.js";
-import Input from "./input.js";
+import MainBtn from "../common/btn.js";
+import Input from "../common/input.js";
 
 function FormInput({ content, value, onChange }) {
   return (
