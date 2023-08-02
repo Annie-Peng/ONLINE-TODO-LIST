@@ -1,6 +1,6 @@
 import "./App.css";
 import Cover from "./components/common/cover.js";
-import FormContent from "./components/login/formContent.js";
+import FormContent from "./components/common/formContent.js";
 
 function App() {
   return (
