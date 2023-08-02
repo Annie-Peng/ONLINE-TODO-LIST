@@ -1,24 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Cover from "./cover.js";
+import FormContent from "./formContent.js";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <section className="bg-primary h-screen w-screen flex items-center justify-center ">
+      <div className="flex gap-[106px] h-[448px] items-center">
+        <Cover />
+        <FormContent />
+      </div>
+    </section>
   );
 }
 
