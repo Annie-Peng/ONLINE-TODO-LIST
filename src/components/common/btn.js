@@ -1,16 +1,11 @@
-export default function MainBtn({ value, onClick }) {
+export default function MainBtn({ value, content, onClick }) {
   return (
     <button
+      value={value}
       className="block mx-auto mt-6 px-12 py-3 text-white bg-secondary rounded-[10px] font-bold"
       onClick={onClick}
     >
-      {value}
+      {content}
     </button>
   );
-}
-
-{
-  /* <p className="hidden peer-invalid:block mt-1 text-warning text-sm font-bold">
-        此欄位不可為空
-      </p> */
 }

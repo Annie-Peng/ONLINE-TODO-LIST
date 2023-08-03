@@ -2,11 +2,8 @@ import { useState } from "react";
 import MainBtn from "../common/btn.js";
 import FormInput from "../common/input.js";
 
-export default function Login({ showLogin, onClickPage }) {
-  const [cusInfo, setCusInfo] = useState({
-    email: "",
-    password: "",
-  });
+export default function Login({ showLogin, onClickPage, cusInfo }) {
+  const [nextCusInfo, setNextCusInfo] = useState(cusInfo);
   const [emailStatus, setEmailStatus] = useState("typing");
   const [passwordStatus, setPasswordStatus] = useState("typing");
 
@@ -16,13 +13,13 @@ export default function Login({ showLogin, onClickPage }) {
   const isEmptyPassword = passwordStatus === null;
 
   function checkForm() {
-    setEmailStatus(cusInfo.email ? "typing" : null);
-    setPasswordStatus(cusInfo.password ? "typing" : null);
+    setEmailStatus(nextCusInfo.email ? "typing" : null);
+    setPasswordStatus(nextCusInfo.password ? "typing" : null);
   }
 
   function handleChange(e) {
-    setCusInfo({
-      ...cusInfo,
+    setNextCusInfo({
+      ...nextCusInfo,
       [e.target.name]: e.target.value,
     });
   }
@@ -34,7 +31,7 @@ export default function Login({ showLogin, onClickPage }) {
         <FormInput
           content="Email"
           name="email"
-          value={cusInfo.email}
+          value={nextCusInfo.email}
           onChange={handleChange}
         />
         {isEmptyEmail && (
@@ -43,14 +40,14 @@ export default function Login({ showLogin, onClickPage }) {
         <FormInput
           content="密碼"
           name="password"
-          value={cusInfo.password}
+          value={nextCusInfo.password}
           onChange={handleChange}
         />
         {isEmptyPassword && (
           <p className="text-warning text-sm font-bold">此欄位不可為空</p>
         )}
       </form>
-      <MainBtn value={"登入"} onClick={checkForm} />
+      <MainBtn value="showLogin" content={"登入"} onClick={checkForm} />
       <button
         value="showRegister"
         className="block mx-auto mt-6 font-bold"

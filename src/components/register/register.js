@@ -2,25 +2,20 @@ import { useState } from "react";
 import MainBtn from "../common/btn.js";
 import FormInput from "../common/input.js";
 
-export default function Register({ showRegister, onClickPage }) {
+export default function Register({ showRegister, onClickPage, cusInfo }) {
   const [emptyStatus, setEmptyStatus] = useState({
     email: "",
     name: "",
     password: "",
     rePassword: "",
   });
-  const [cusInfo, setCusInfo] = useState({
-    email: "",
-    name: "",
-    password: "",
-    rePassword: "",
-  });
+  const [nextCusInfo, setNextCusInfo] = useState(cusInfo);
 
   if (!showRegister) return null;
 
   function handleChange(e) {
-    setCusInfo({
-      ...cusInfo,
+    setNextCusInfo({
+      ...nextCusInfo,
       [e.target.name]: e.target.value,
     });
   }
@@ -30,7 +25,7 @@ export default function Register({ showRegister, onClickPage }) {
 
     if (!e.target.value) {
       setEmptyStatus({
-        ...cusInfo,
+        ...nextCusInfo,
         [e.target.name]: true,
       });
     }
@@ -43,7 +38,7 @@ export default function Register({ showRegister, onClickPage }) {
         <FormInput
           content="Email"
           name="email"
-          value={cusInfo.email}
+          value={nextCusInfo.email}
           onChange={handleChange}
         />
         {emptyStatus.email && (
@@ -52,7 +47,7 @@ export default function Register({ showRegister, onClickPage }) {
         <FormInput
           content="您的暱稱"
           name="name"
-          value={cusInfo.name}
+          value={nextCusInfo.name}
           onChange={handleChange}
         />
         {emptyStatus.name && (
@@ -61,7 +56,7 @@ export default function Register({ showRegister, onClickPage }) {
         <FormInput
           content="密碼"
           name="password"
-          value={cusInfo.password}
+          value={nextCusInfo.password}
           onChange={handleChange}
         />
         {emptyStatus.password && (
@@ -70,14 +65,14 @@ export default function Register({ showRegister, onClickPage }) {
         <FormInput
           content="再次輸入密碼"
           name="rePassword"
-          value={cusInfo.rePassword}
+          value={nextCusInfo.rePassword}
           onChange={handleChange}
         />
         {emptyStatus.rePassword && (
           <p className="text-warning text-sm font-bold">此欄位不可為空</p>
         )}
       </form>
-      <MainBtn value={"註冊帳號"} onClick={checkForm} />
+      <MainBtn value="showRegister" content={"註冊帳號"} onClick={checkForm} />
       <button
         value="showLogin"
         className="block mx-auto mt-6 font-bold"
