@@ -72,9 +72,14 @@ export default function Register({ showRegister, onClickPage, cusInfo }) {
           <p className="text-warning text-sm font-bold">此欄位不可為空</p>
         )}
       </form>
-      <MainBtn value="showRegister" content={"註冊帳號"} onClick={checkForm} />
+      <MainBtn
+        value="showCusToDoList"
+        content={"註冊帳號"}
+        onClick={onClickPage}
+        // checkForm
+      />
       <button
-        value="showLogin"
+        value="showCusToDoList"
         className="block mx-auto mt-6 font-bold"
         onClick={onClickPage}
       >

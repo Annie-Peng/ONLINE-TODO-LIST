@@ -47,7 +47,8 @@ export default function Login({ showLogin, onClickPage, cusInfo }) {
           <p className="text-warning text-sm font-bold">此欄位不可為空</p>
         )}
       </form>
-      <MainBtn value="showLogin" content={"登入"} onClick={checkForm} />
+      <MainBtn value="showCusToDoList" content={"登入"} onClick={onClickPage} />
+      {/* checkForm */}
       <button
         value="showRegister"
         className="block mx-auto mt-6 font-bold"
