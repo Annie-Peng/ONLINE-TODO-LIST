@@ -73,7 +73,7 @@ export default function Register({ showRegister, onClickPage, cusInfo }) {
         )}
       </form>
       <MainBtn
-        value="showCusToDoList"
+        value="showLogin"
         content={"註冊帳號"}
         onClick={onClickPage}
         // checkForm
