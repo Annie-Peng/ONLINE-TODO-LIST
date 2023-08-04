@@ -3,14 +3,20 @@ import Cover from "./components/common/cover.js";
 import FormContent from "./components/common/formContent.js";
 import { useState } from "react";
 import ToDoList from "./components/todolist/todolist.js";
+import Container from "./components/common/container";
 
 function CommonPage({ pages, onClickPage }) {
   return (
-    <section className="bg-primary h-screen w-screen flex items-center justify-center ">
-      <div className="flex gap-[106px] h-[448px] items-center">
-        <Cover />
-        <FormContent pages={pages} onClickPage={onClickPage} />
-      </div>
+    <section className="bg-primary h-screen w-screen flex justify-center">
+      <Container>
+        <div
+          className="flex w-full justify-center gap-[106px] h-[448px] items-center absolute top-1/2 left-1/2
+        -translate-x-1/2 -translate-y-1/2"
+        >
+          <Cover />
+          <FormContent pages={pages} onClickPage={onClickPage} />
+        </div>
+      </Container>
     </section>
   );
 }
