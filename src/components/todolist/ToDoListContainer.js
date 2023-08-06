@@ -1,3 +1,10 @@
+import { Fragment, useState, useEffect } from "react";
+import {
+  getToDoList,
+  patchToDoListItem,
+  deleteToDoListItem,
+} from "../common/api";
+
 const titleList = ["全部", "待完成", "已完成"];
 
 function ToDoListTitle() {
@@ -15,27 +22,71 @@ function ToDoListTitle() {
   );
 }
 
-function ToDoListContent() {
+function ToDoListContent({ itemLists, setToDoListData }) {
+  const [updateToDoList, setUpdateToDoList] = useState(itemLists);
+
+  console.log(updateToDoList);
+
+  useEffect(() => {
+    itemLists = updateToDoList;
+    console.log(itemLists);
+    setToDoListData(itemLists);
+  }, [updateToDoList]);
+
+  function handleChange(e, id) {
+    setUpdateToDoList(
+      itemLists.map((item) => {
+        if (item.id === id) {
+          const value = {
+            ...item,
+            todo: e.target.value,
+          };
+          value.todo
+            ? patchToDoListItem(value.todo, id)
+            : deleteToDoListItem(id);
+          return value;
+        } else {
+          return item;
+        }
+      })
+    );
+  }
+
   return (
     <div className="toDoListContent p-6 flex flex-col gap-y-4">
-      <ul className="flex flex-col gap-y-4">
-        <li className="border-b border-line pb-4 flex rectangleBox text-sm">
-          把冰箱發霉的檸檬拿去丟
-        </li>
+      <ul className="flex flex-col gap-y-4 relative">
+        {itemLists.map((item) => (
+          <Fragment key={item.id}>
+            <li
+              className="border-b border-line pb-4 flex text-sm vectorCross"
+              // onClick={handleClick}
+            >
+              <span className="rectangleBox"></span>
+              <input
+                className="w-full"
+                value={item.todo}
+                onChange={(e) => handleChange(e, item.id)}
+              />
+            </li>
+          </Fragment>
+        ))}
       </ul>
       <p className="py-2 flex justify-between">
-        <span className="text-sm">5 個待完成項目</span>
+        <span className="text-sm">{itemLists.length} 個待完成項目</span>
         <button className="text-sm text-tertiary">清除已完成項目</button>
       </p>
     </div>
   );
 }
 
-export default function ToDoListContainer() {
+export default function ToDoListContainer({ itemLists, setToDoListData }) {
   return (
     <div className="w-[500px] mt-4 bg-white rounded-[10px] shadow-[0_0_15px_0] shadow-tertiary mx-auto">
       <ToDoListTitle />
-      <ToDoListContent />
+      <ToDoListContent
+        itemLists={itemLists}
+        setToDoListData={setToDoListData}
+      />
     </div>
   );
 }
