@@ -1,6 +1,6 @@
-import Logo from "./logo";
+import Logo from "../common/logo";
 
-export default function CoverTitle({ onClickPage }) {
+export default function Header({ onClickPage }) {
   return (
     <header className="flex justify-between items-center">
       <Logo width={242} height={38} />
