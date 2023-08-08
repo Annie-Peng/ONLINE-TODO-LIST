@@ -1,11 +1,9 @@
-import "./App.css";
-import Cover from "./components/common/cover.js";
-import FormContent from "./components/common/formContent.js";
-import { useState } from "react";
-import ToDoList from "./components/todolist/todolist.js";
-import Container from "./components/common/container";
+import Cover from "./components/common/Cover.js";
+import Container from "./components/common/Container";
+import Login from "./components/login";
+import { Outlet, Link } from "react-router-dom";
 
-function CommonPage({ pages, onClickPage }) {
+export default function CommonPage() {
   return (
     <section className="bg-primary h-screen w-screen flex justify-center">
       <Container>
@@ -14,41 +12,9 @@ function CommonPage({ pages, onClickPage }) {
         -translate-x-1/2 -translate-y-1/2"
         >
           <Cover />
-          <FormContent pages={pages} onClickPage={onClickPage} />
+          <Outlet />
         </div>
       </Container>
     </section>
   );
 }
-
-function App() {
-  const initialization = {
-    showLogin: true,
-    showRegister: false,
-    showCusToDoList: false,
-  };
-  const [pages, setPages] = useState(initialization);
-
-  function onClickPage(e) {
-    const value = e.target.value;
-    let nextPage;
-
-    if (value === "showLogin") {
-      nextPage = initialization;
-    } else {
-      nextPage = {
-        ...pages,
-        showLogin: false,
-        [value]: true,
-      };
-    }
-    setPages(nextPage);
-  }
-
-  if (pages.showCusToDoList) {
-    return <ToDoList onClickPage={onClickPage} />;
-  }
-  return <CommonPage pages={pages} onClickPage={onClickPage} />;
-}
-
-export default App;

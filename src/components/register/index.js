@@ -1,17 +1,21 @@
 import { useState } from "react";
-import MainBtn from "../common/btn.js";
-import FormInput from "../common/input.js";
+import MainBtn from "../common/MainBtn.js";
+import FormInput from "../common/FormInput.js";
+import { Link } from "react-router-dom";
 
-export default function Register({ showRegister, onClickPage, cusInfo }) {
+export default function Register() {
   const [emptyStatus, setEmptyStatus] = useState({
     email: "",
     name: "",
     password: "",
     rePassword: "",
   });
-  const [nextCusInfo, setNextCusInfo] = useState(cusInfo);
-
-  if (!showRegister) return null;
+  const [nextCusInfo, setNextCusInfo] = useState({
+    email: "",
+    name: "",
+    password: "",
+    rePassword: "",
+  });
 
   function handleChange(e) {
     setNextCusInfo({
@@ -72,18 +76,17 @@ export default function Register({ showRegister, onClickPage, cusInfo }) {
           <p className="text-warning text-sm font-bold">此欄位不可為空</p>
         )}
       </form>
-      <MainBtn
-        value="showLogin"
-        content={"註冊帳號"}
-        onClick={onClickPage}
-        // checkForm
-      />
-      <button
-        value="showCusToDoList"
-        className="block mx-auto mt-6 font-bold"
-        onClick={onClickPage}
-      >
-        登入
+
+      <Link to="/ONLINE-TODO-LIST">
+        <MainBtn
+          value="showLogin"
+          // checkForm
+        >
+          註冊帳號
+        </MainBtn>
+      </Link>
+      <button value="showCusToDoList" className="block mx-auto mt-6 font-bold">
+        <Link to="/ONLINE-TODO-LIST">登入</Link>
       </button>
     </div>
   );
