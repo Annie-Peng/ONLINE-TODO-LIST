@@ -1,13 +1,15 @@
 import { useState } from "react";
 import MainBtn from "../common/MainBtn.js";
 import FormInput from "../common/FormInput.js";
+import { Link } from "react-router-dom";
 
-export default function Login({ showLogin, onClickPage, cusInfo }) {
-  const [nextCusInfo, setNextCusInfo] = useState(cusInfo);
+export default function Login() {
+  const [nextCusInfo, setNextCusInfo] = useState({
+    email: "",
+    password: "",
+  });
   const [emailStatus, setEmailStatus] = useState("typing");
   const [passwordStatus, setPasswordStatus] = useState("typing");
-
-  if (!showLogin) return null;
 
   const isEmptyEmail = emailStatus === null;
   const isEmptyPassword = passwordStatus === null;
@@ -47,15 +49,14 @@ export default function Login({ showLogin, onClickPage, cusInfo }) {
           <p className="text-warning text-sm font-bold">此欄位不可為空</p>
         )}
       </form>
-      <MainBtn value="showCusToDoList" content={"登入"} onClick={onClickPage} />
+      <Link to={`todolist`}>
+        <MainBtn value="showCusToDoList">登入</MainBtn>
+      </Link>
       {/* checkForm */}
-      <button
-        value="showRegister"
-        className="block mx-auto mt-6 font-bold"
-        onClick={onClickPage}
-      >
-        註冊帳號
+      <button value="showRegister" className="block mx-auto mt-6 font-bold">
+        <Link to={`register`}>註冊帳號</Link>
       </button>
     </div>
   );
 }
+<Link to={`register`}>register</Link>;

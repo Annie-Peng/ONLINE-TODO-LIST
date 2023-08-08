@@ -30,7 +30,7 @@ function AddItem() {
   );
 }
 
-export default function ToDoList({ onClickPage }) {
+export default function ToDoList() {
   const [toDoListData, setToDoListData] = useState([]);
   // const [newData, setNewData] = useState([]);
 
@@ -56,7 +56,7 @@ export default function ToDoList({ onClickPage }) {
       className="pt-4 pl-[34px] pr-8"
     >
       <Container>
-        <Header onClickPage={onClickPage} />
+        <Header />
         <AddItem />
         {toDoListData.length > 0 ? (
           <ToDoListContainer
