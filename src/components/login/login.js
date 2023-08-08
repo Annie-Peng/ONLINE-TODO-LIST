@@ -1,6 +1,6 @@
 import { useState } from "react";
-import MainBtn from "../common/btn.js";
-import FormInput from "../common/input.js";
+import MainBtn from "../common/MainBtn.js";
+import FormInput from "../common/FormInput.js";
 
 export default function Login({ showLogin, onClickPage, cusInfo }) {
   const [nextCusInfo, setNextCusInfo] = useState(cusInfo);

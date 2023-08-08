@@ -1,7 +1,7 @@
-import Header from "./header";
+import Header from "./Header";
 import ToDoListContainer from "./ToDoListContainer";
-import Container from "../common/container";
-import { Input } from "../common/input";
+import Container from "../common/Container";
+import { Input } from "../common/FormInput";
 import plusBtn from "../../images/btn/plusBtn.png";
 import { useState, useEffect } from "react";
 import { addToDoListItem } from "../common/api";

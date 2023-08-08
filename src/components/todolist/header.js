@@ -1,4 +1,4 @@
-import Logo from "../common/logo";
+import Logo from "../common/Logo";
 
 export default function Header({ onClickPage }) {
   return (

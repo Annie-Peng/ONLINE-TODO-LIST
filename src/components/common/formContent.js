@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Login from "../login/login.js";
-import Register from "../register/register.js";
+import Login from "../login/Login.js";
+import Register from "../register/Register.js";
 
 export default function FormContent({ pages, onClickPage }) {
   const [cusInfo, setCusInfo] = useState({

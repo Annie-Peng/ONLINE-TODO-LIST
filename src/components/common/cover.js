@@ -1,4 +1,4 @@
-import Logo from "./logo.js";
+import Logo from "./Logo.js";
 import coverPic from "../../images/cover/coverPic.png";
 
 export default function Cover() {

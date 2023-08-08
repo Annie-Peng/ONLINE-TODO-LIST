@@ -1,9 +1,9 @@
 import "./App.css";
-import Cover from "./components/common/cover.js";
-import FormContent from "./components/common/formContent.js";
+import Cover from "./components/common/Cover.js";
+import FormContent from "./components/common/FormContent.js";
 import { useState } from "react";
-import ToDoList from "./components/todolist/todolist.js";
-import Container from "./components/common/container";
+import ToDoList from "./components/todolist/ToDoList.js";
+import Container from "./components/common/Container";
 
 function CommonPage({ pages, onClickPage }) {
   return (
