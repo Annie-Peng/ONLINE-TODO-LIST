@@ -4,11 +4,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import ErrorPage from "./components/common/ErrorPage";
-import Register from "./components/register";
-import ToDoList from "./components/todolist";
-import Login from "./components/login";
+import Register, { action as editRegister } from "./components/register";
+import ToDoList, { loader as todolistLoader } from "./components/todolist";
+import Login, { action as editLogin } from "./components/login";
 
-// 建立 Router （用 createBrowserRouter 建立 BrowserRouter)
 const router = createBrowserRouter([
   {
     path: "/ONLINE-TODO-LIST/",
@@ -18,16 +17,19 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Login />,
+        action: editLogin,
       },
       {
         path: "/ONLINE-TODO-LIST/register",
         element: <Register />,
+        action: editRegister,
       },
     ],
   },
   {
     path: "/ONLINE-TODO-LIST/todolist",
     element: <ToDoList />,
+    loader: todolistLoader,
   },
 ]);
 

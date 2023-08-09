@@ -3,9 +3,10 @@ import ToDoListContainer from "./ToDoListContainer";
 import Container from "../common/Container";
 import { Input } from "../common/FormInput";
 import plusBtn from "../../images/btn/plusBtn.png";
-import { useState, useEffect } from "react";
-import { addToDoListItem } from "../common/api";
+import { useState } from "react";
+import { addToDoListItem, getToDoList } from "../common/api";
 import coverPic2 from "../../images/cover/coverPic2.png";
+import { useLoaderData } from "react-router-dom";
 
 function AddItem() {
   const [newItem, setNewItem] = useState("");
@@ -31,22 +32,23 @@ function AddItem() {
 }
 
 export default function ToDoList() {
-  const [toDoListData, setToDoListData] = useState([]);
+  const { toDoListItem } = useLoaderData();
+
   // const [newData, setNewData] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch(
-        "https://fathomless-brushlands-42339.herokuapp.com/todo2"
-      )
-        .then((res) => res.json())
-        .then((result) => {
-          setToDoListData(result);
-          console.log(result);
-        });
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const result = await fetch(
+  //       "https://fathomless-brushlands-42339.herokuapp.com/todo2"
+  //     )
+  //       .then((res) => res.json())
+  //       .then((result) => {
+  //         setToDoListData(result);
+  //         console.log(result);
+  //       });
+  //   };
+  //   fetchData();
+  // }, []);
 
   return (
     <section
@@ -58,11 +60,8 @@ export default function ToDoList() {
       <Container>
         <Header />
         <AddItem />
-        {toDoListData.length > 0 ? (
-          <ToDoListContainer
-            itemLists={toDoListData}
-            setToDoListData={setToDoListData}
-          />
+        {toDoListItem.todos.length > 0 ? (
+          <ToDoListContainer itemLists={toDoListItem.todos} />
         ) : (
           <ToDoListEmpty />
         )}
@@ -80,4 +79,10 @@ function ToDoListEmpty() {
       </div>
     </div>
   );
+}
+
+export async function loader() {
+  const token = localStorage.getItem("user-token");
+  const toDoListItem = await getToDoList(token);
+  return { toDoListItem };
 }

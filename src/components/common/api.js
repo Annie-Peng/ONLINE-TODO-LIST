@@ -1,10 +1,13 @@
-const URL = "https://fathomless-brushlands-42339.herokuapp.com/todo2";
+const URL = "https://todoo.5xcamp.us/";
 
 //得到項目
-export function getToDoList() {
-  // console.log(setToDoListData);
-  fetch(URL, {
+export function getToDoList(token) {
+  // console.log(token);
+  return fetch(`${URL}todos`, {
     method: "GET",
+    headers: {
+      Authorization: token,
+    },
   })
     .then((res) => res.json())
     .then((result) => {
@@ -52,4 +55,20 @@ export function patchToDoListItem(value, id) {
   })
     .then((res) => res.json())
     .then((result) => console.log(result));
+}
+
+//註冊帳號
+export function postUser(value) {
+  fetch(`${URL}users`, {
+    method: "POST",
+    body: JSON.stringify(value),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      console.log(result);
+      return result;
+    });
 }

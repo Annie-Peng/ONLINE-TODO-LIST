@@ -1,7 +1,7 @@
 import { useState } from "react";
 import MainBtn from "../common/MainBtn.js";
 import FormInput from "../common/FormInput.js";
-import { Link } from "react-router-dom";
+import { Link, redirect, Form } from "react-router-dom";
 
 export default function Register() {
   const [emptyStatus, setEmptyStatus] = useState({
@@ -24,21 +24,33 @@ export default function Register() {
     });
   }
 
-  function checkForm(e) {
-    e.preventDefault();
+  // function checkForm(e) {
+  //   e.preventDefault();
 
-    if (!e.target.value) {
-      setEmptyStatus({
-        ...nextCusInfo,
-        [e.target.name]: true,
-      });
-    }
-  }
+  //   if (!e.target.value) {
+  //     setEmptyStatus({
+  //       ...nextCusInfo,
+  //       [e.target.name]: true,
+  //     });
+  //   }
+  // }
+
+  // function handleClick(e) {
+  //   // e.preventDefault();
+  //   const obj = {
+  //     user: {
+  //       email: nextCusInfo.email,
+  //       nickname: nextCusInfo.name,
+  //       password: nextCusInfo.password,
+  //     },
+  //   };
+  //   action(obj);
+  // }
 
   return (
     <div className="w-[304px]">
       <h3 className="font-bold text-2xl">註冊帳號</h3>
-      <form>
+      <Form method="post">
         <FormInput
           content="Email"
           name="email"
@@ -75,19 +87,39 @@ export default function Register() {
         {emptyStatus.rePassword && (
           <p className="text-warning text-sm font-bold">此欄位不可為空</p>
         )}
-      </form>
+        <MainBtn value="showLogin">註冊帳號</MainBtn>
+      </Form>
 
-      <Link to="/ONLINE-TODO-LIST">
-        <MainBtn
-          value="showLogin"
-          // checkForm
-        >
-          註冊帳號
-        </MainBtn>
-      </Link>
       <button value="showCusToDoList" className="block mx-auto mt-6 font-bold">
         <Link to="/ONLINE-TODO-LIST">登入</Link>
       </button>
     </div>
   );
+}
+
+export async function action({ request }) {
+  const data = await request.formData();
+  const cusData = {
+    user: {
+      email: data.get("email"),
+      nickname: data.get("name"),
+      password: data.get("password"),
+    },
+  };
+
+  const response = await fetch("https://todoo.5xcamp.us/users", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(cusData),
+  });
+
+  // console.log(response);
+
+  console.log(response.headers.get("Authorization")); //取得token
+
+  if (!response.ok) {
+    return redirect("/ONLINE-TODO-LIST/");
+  } else {
+    return null;
+  }
 }
