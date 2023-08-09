@@ -1,4 +1,6 @@
-const URL = "https://fathomless-brushlands-42339.herokuapp.com/todo2";
+import { redirect } from "react-router-dom";
+
+const URL = "https://todoo.5xcamp.us/";
 
 //得到項目
 export function getToDoList() {
@@ -52,4 +54,20 @@ export function patchToDoListItem(value, id) {
   })
     .then((res) => res.json())
     .then((result) => console.log(result));
+}
+
+//註冊帳號
+export function postUser(value) {
+  fetch(`${URL}users`, {
+    method: "POST",
+    body: JSON.stringify(value),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      console.log(result);
+      return result;
+    });
 }
