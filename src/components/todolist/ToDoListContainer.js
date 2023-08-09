@@ -1,9 +1,5 @@
 import { Fragment, useState, useEffect } from "react";
-import {
-  getToDoList,
-  patchToDoListItem,
-  deleteToDoListItem,
-} from "../common/api";
+import { patchToDoListItem, deleteToDoListItem } from "../common/api";
 
 const titleList = ["全部", "待完成", "已完成"];
 
@@ -22,16 +18,16 @@ function ToDoListTitle() {
   );
 }
 
-function ToDoListContent({ itemLists, setToDoListData }) {
+function ToDoListContent({ itemLists }) {
   const [updateToDoList, setUpdateToDoList] = useState(itemLists);
 
   console.log(updateToDoList);
 
-  useEffect(() => {
-    itemLists = updateToDoList;
-    console.log(itemLists);
-    setToDoListData(itemLists);
-  }, [updateToDoList]);
+  // useEffect(() => {
+  //   itemLists = updateToDoList;
+  //   console.log(itemLists);
+  //   setToDoListData(itemLists);
+  // }, [updateToDoList]);
 
   function handleChange(e, id) {
     setUpdateToDoList(
@@ -55,7 +51,7 @@ function ToDoListContent({ itemLists, setToDoListData }) {
   return (
     <div className="toDoListContent p-6 flex flex-col gap-y-4">
       <ul className="flex flex-col gap-y-4 relative">
-        {itemLists.map((item) => (
+        {updateToDoList.map((item) => (
           <Fragment key={item.id}>
             <li
               className="border-b border-line pb-4 flex text-sm vectorCross"
@@ -64,7 +60,7 @@ function ToDoListContent({ itemLists, setToDoListData }) {
               <span className="rectangleBox"></span>
               <input
                 className="w-full"
-                value={item.todo}
+                value={item.content}
                 onChange={(e) => handleChange(e, item.id)}
               />
             </li>
@@ -72,21 +68,18 @@ function ToDoListContent({ itemLists, setToDoListData }) {
         ))}
       </ul>
       <p className="py-2 flex justify-between">
-        <span className="text-sm">{itemLists.length} 個待完成項目</span>
+        <span className="text-sm">{updateToDoList.length} 個待完成項目</span>
         <button className="text-sm text-tertiary">清除已完成項目</button>
       </p>
     </div>
   );
 }
 
-export default function ToDoListContainer({ itemLists, setToDoListData }) {
+export default function ToDoListContainer({ itemLists }) {
   return (
     <div className="w-[500px] mt-4 bg-white rounded-[10px] shadow-[0_0_15px_0] shadow-tertiary mx-auto">
       <ToDoListTitle />
-      <ToDoListContent
-        itemLists={itemLists}
-        setToDoListData={setToDoListData}
-      />
+      <ToDoListContent itemLists={itemLists} />
     </div>
   );
 }

@@ -1,12 +1,13 @@
-import { redirect } from "react-router-dom";
-
 const URL = "https://todoo.5xcamp.us/";
 
 //得到項目
-export function getToDoList() {
-  // console.log(setToDoListData);
-  fetch(URL, {
+export function getToDoList(token) {
+  // console.log(token);
+  return fetch(`${URL}todos`, {
     method: "GET",
+    headers: {
+      Authorization: token,
+    },
   })
     .then((res) => res.json())
     .then((result) => {

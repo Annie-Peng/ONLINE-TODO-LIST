@@ -2,7 +2,6 @@ import { useState } from "react";
 import MainBtn from "../common/MainBtn.js";
 import FormInput from "../common/FormInput.js";
 import { Link, redirect, Form } from "react-router-dom";
-import { postUser } from "../common/api.js";
 
 export default function Register() {
   const [emptyStatus, setEmptyStatus] = useState({
@@ -98,7 +97,7 @@ export default function Register() {
   );
 }
 
-export async function action({ request, params }) {
+export async function action({ request }) {
   const data = await request.formData();
   const cusData = {
     user: {
@@ -114,7 +113,7 @@ export async function action({ request, params }) {
     body: JSON.stringify(cusData),
   });
 
-  console.log(response, params);
+  // console.log(response);
 
   console.log(response.headers.get("Authorization")); //取得token
 
