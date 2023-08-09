@@ -17,19 +17,24 @@ export function getToDoList(token) {
 }
 
 //新增項目
-export function addToDoListItem(value) {
-  fetch(URL, {
+export function addToDoListItem(token, value) {
+  fetch(`${URL}todos`, {
     method: "POST",
     body: JSON.stringify({
-      todo: value,
-      finished: false,
+      todo: {
+        content: value,
+      },
     }),
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
     },
   })
     .then((res) => res.json())
-    .then((result) => console.log(result));
+    .then((result) => {
+      console.log(result);
+      return result;
+    });
 }
 
 //刪除項目
