@@ -51,7 +51,7 @@ export default function Login() {
         <MainBtn value="showCusToDoList">登入</MainBtn>
       </Form>
       {/* checkForm */}
-      <button value="showRegister" className="block mx-auto mt-6 font-bold">
+      <button className="block mx-auto mt-6 font-bold">
         <Link to={`register`}>註冊帳號</Link>
       </button>
     </div>
