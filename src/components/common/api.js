@@ -18,7 +18,7 @@ export function getToDoList(token) {
 
 //新增項目
 export function addToDoListItem(token, value) {
-  fetch(`${URL}todos`, {
+  return fetch(`${URL}todos`, {
     method: "POST",
     body: JSON.stringify({
       todo: {

@@ -21,17 +21,13 @@ function ToDoListTitle() {
 function ToDoListContent({ itemLists }) {
   const [updateToDoList, setUpdateToDoList] = useState(itemLists);
 
-  console.log(updateToDoList);
-
-  // useEffect(() => {
-  //   itemLists = updateToDoList;
-  //   console.log(itemLists);
-  //   setToDoListData(itemLists);
-  // }, [updateToDoList]);
+  useEffect(() => {
+    setUpdateToDoList(itemLists);
+  }, [itemLists]);
 
   function handleChange(e, id) {
     setUpdateToDoList(
-      itemLists.map((item) => {
+      updateToDoList.map((item) => {
         if (item.id === id) {
           const value = {
             ...item,
