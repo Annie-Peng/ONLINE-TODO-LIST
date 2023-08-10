@@ -38,9 +38,13 @@ export function addToDoListItem(token, value) {
 }
 
 //刪除項目
-export function deleteToDoListItem(id) {
-  fetch(`${URL}/${id}`, {
+export function deleteToDoListItem(token, id) {
+  fetch(`${URL}todos/${id}`, {
     method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
   })
     .then((res) => res.json())
     .then((result) => console.log(result));

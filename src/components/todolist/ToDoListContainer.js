@@ -29,31 +29,25 @@ function ToDoListContent({ itemLists }) {
   function handleChange(e, id) {
     const result = updateToDoList.map((item) => {
       if (item.id === id) {
-        const value = {
+        let value = {
           ...item,
           content: e.target.value,
         };
-        patchToDoListItem(token, value.content, id);
+        value.content
+          ? patchToDoListItem(token, value.content, id)
+          : (value = deleteIdItem(token, id));
         return value;
       } else {
         return item;
       }
     });
-    setUpdateToDoList(result);
-    // updateToDoList.map((item) => {
-    //   if (item.id === id) {
-    //     const value = {
-    //       ...item,
-    //       content: e.target.value,
-    //     };
-    //     value.todo
-    //       ? patchToDoListItem(value.todo, id)
-    //       : deleteToDoListItem(id);
-    //     return value;
-    //   } else {
-    //     return item;
-    //   }
-    // })
+    const newResult = result.filter((item) => item.id);
+    setUpdateToDoList(newResult);
+  }
+
+  function deleteIdItem(token, id) {
+    deleteToDoListItem(token, id);
+    return { id: false };
   }
 
   return (
