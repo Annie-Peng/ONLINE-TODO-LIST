@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
 import { patchToDoListItem, deleteToDoListItem } from "../common/api";
+import { token } from "./index";
 
 const titleList = ["全部", "待完成", "已完成"];
 
@@ -26,22 +27,33 @@ function ToDoListContent({ itemLists }) {
   }, [itemLists]);
 
   function handleChange(e, id) {
-    setUpdateToDoList(
-      updateToDoList.map((item) => {
-        if (item.id === id) {
-          const value = {
-            ...item,
-            todo: e.target.value,
-          };
-          value.todo
-            ? patchToDoListItem(value.todo, id)
-            : deleteToDoListItem(id);
-          return value;
-        } else {
-          return item;
-        }
-      })
-    );
+    const result = updateToDoList.map((item) => {
+      if (item.id === id) {
+        const value = {
+          ...item,
+          content: e.target.value,
+        };
+        patchToDoListItem(token, value.content, id);
+        return value;
+      } else {
+        return item;
+      }
+    });
+    setUpdateToDoList(result);
+    // updateToDoList.map((item) => {
+    //   if (item.id === id) {
+    //     const value = {
+    //       ...item,
+    //       content: e.target.value,
+    //     };
+    //     value.todo
+    //       ? patchToDoListItem(value.todo, id)
+    //       : deleteToDoListItem(id);
+    //     return value;
+    //   } else {
+    //     return item;
+    //   }
+    // })
   }
 
   return (

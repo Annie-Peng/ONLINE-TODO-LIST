@@ -8,7 +8,7 @@ import { addToDoListItem, getToDoList } from "../common/api";
 import coverPic2 from "../../images/cover/coverPic2.png";
 import { useLoaderData } from "react-router-dom";
 
-const token = localStorage.getItem("user-token");
+export const token = localStorage.getItem("user-token");
 
 function AddItem({ onClick, onChange, newItem }) {
   return (

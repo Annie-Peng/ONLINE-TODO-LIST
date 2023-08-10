@@ -47,15 +47,17 @@ export function deleteToDoListItem(id) {
 }
 
 //修改項目
-export function patchToDoListItem(value, id) {
-  fetch(`${URL}/${id}`, {
+export function patchToDoListItem(token, value, id) {
+  fetch(`${URL}todos/${id}`, {
     method: "PATCH",
     body: JSON.stringify({
-      todo: value,
-      finished: false,
+      todo: {
+        content: value,
+      },
     }),
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
     },
   })
     .then((res) => res.json())
