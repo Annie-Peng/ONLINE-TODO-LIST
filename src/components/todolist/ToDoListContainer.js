@@ -50,21 +50,30 @@ function ToDoListContent({ itemLists }) {
     return { id: false };
   }
 
+  function handleClick(id) {
+    const result = updateToDoList.filter((item) => item.id !== id);
+    deleteIdItem(token, id);
+    setUpdateToDoList(result);
+  }
+
   return (
     <div className="toDoListContent p-6 flex flex-col gap-y-4">
       <ul className="flex flex-col gap-y-4 relative">
         {updateToDoList.map((item) => (
           <Fragment key={item.id}>
-            <li
-              className="border-b border-line pb-4 flex text-sm vectorCross"
-              // onClick={handleClick}
-            >
+            <li className="border-b border-line pb-4 flex text-sm relative">
               <span className="rectangleBox"></span>
               <input
                 className="w-full"
                 value={item.content}
                 onChange={(e) => handleChange(e, item.id)}
               />
+              <button
+                type="button"
+                className="vectorCross"
+                onClick={() => handleClick(item.id)}
+                style={{ width: "16px", height: "16px" }}
+              ></button>
             </li>
           </Fragment>
         ))}

@@ -24,8 +24,8 @@ body {
   position: absolute;
   content: "";
   background-image: url("./images/btn/vectorCross.png");
+  top: 0;
   right: 0;
-  margin-top: 2px;
   width: 16px;
   height: 16px;
 }
