@@ -1,8 +1,8 @@
-import React, { Children } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import App from "./App";
+import CommonPage from "./CommonPage";
 import ErrorPage from "./components/common/ErrorPage";
 import Register, { action as editRegister } from "./components/register";
 import ToDoList, { loader as todolistLoader } from "./components/todolist";
@@ -11,7 +11,7 @@ import Login, { action as editLogin } from "./components/login";
 const router = createBrowserRouter([
   {
     path: "/ONLINE-TODO-LIST/",
-    element: <App />,
+    element: <CommonPage />,
     errorElement: <ErrorPage />,
     children: [
       {

@@ -1,7 +1,6 @@
 import Cover from "./components/common/Cover.js";
-import Container from "./components/common/Container";
-import Login from "./components/login";
-import { Outlet, Link } from "react-router-dom";
+import Container from "./components/common/Container.js";
+import { Outlet } from "react-router-dom";
 
 export default function CommonPage() {
   return (

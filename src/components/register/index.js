@@ -87,10 +87,9 @@ export default function Register() {
         {emptyStatus.rePassword && (
           <p className="text-warning text-sm font-bold">此欄位不可為空</p>
         )}
-        <MainBtn value="showLogin">註冊帳號</MainBtn>
+        <MainBtn>註冊帳號</MainBtn>
       </Form>
-
-      <button value="showCusToDoList" className="block mx-auto mt-6 font-bold">
+      <button className="block mx-auto mt-6 font-bold">
         <Link to="/ONLINE-TODO-LIST">登入</Link>
       </button>
     </div>
@@ -117,7 +116,7 @@ export async function action({ request }) {
 
   console.log(response.headers.get("Authorization")); //取得token
 
-  if (!response.ok) {
+  if (response.ok) {
     return redirect("/ONLINE-TODO-LIST/");
   } else {
     return null;

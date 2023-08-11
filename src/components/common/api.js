@@ -17,40 +17,51 @@ export function getToDoList(token) {
 }
 
 //新增項目
-export function addToDoListItem(value) {
-  fetch(URL, {
+export function addToDoListItem(token, value) {
+  return fetch(`${URL}todos`, {
     method: "POST",
     body: JSON.stringify({
-      todo: value,
-      finished: false,
+      todo: {
+        content: value,
+      },
     }),
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
+    },
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      console.log(result);
+      return result;
+    });
+}
+
+//刪除項目
+export function deleteToDoListItem(token, id) {
+  fetch(`${URL}todos/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
     },
   })
     .then((res) => res.json())
     .then((result) => console.log(result));
 }
 
-//刪除項目
-export function deleteToDoListItem(id) {
-  fetch(`${URL}/${id}`, {
-    method: "DELETE",
-  })
-    .then((res) => res.json())
-    .then((result) => console.log(result));
-}
-
 //修改項目
-export function patchToDoListItem(value, id) {
-  fetch(`${URL}/${id}`, {
+export function patchToDoListItem(token, value, id) {
+  fetch(`${URL}todos/${id}`, {
     method: "PATCH",
     body: JSON.stringify({
-      todo: value,
-      finished: false,
+      todo: {
+        content: value,
+      },
     }),
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
     },
   })
     .then((res) => res.json())
@@ -64,6 +75,22 @@ export function postUser(value) {
     body: JSON.stringify(value),
     headers: {
       "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      console.log(result);
+      return result;
+    });
+}
+
+//完成項目
+export function completeToDoListItem(token, id) {
+  return fetch(`${URL}todos/${id}/toggle`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
     },
   })
     .then((res) => res.json())

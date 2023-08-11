@@ -3,29 +3,24 @@ import ToDoListContainer from "./ToDoListContainer";
 import Container from "../common/Container";
 import { Input } from "../common/FormInput";
 import plusBtn from "../../images/btn/plusBtn.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { addToDoListItem, getToDoList } from "../common/api";
 import coverPic2 from "../../images/cover/coverPic2.png";
 import { useLoaderData } from "react-router-dom";
 
-function AddItem() {
-  const [newItem, setNewItem] = useState("");
+export const token = localStorage.getItem("user-token");
 
-  function handleClick() {
-    addToDoListItem(newItem);
-    setNewItem("");
-  }
-
+function AddItem({ onClick, onChange, newItem }) {
   return (
     <div className="mt-10 w-[500px] mx-auto flex shadow-[0_0_15px_0] shadow-tertiary rounded-[10px] h-[48px]">
       <Input
         name="addToDoList"
         value={newItem}
         showContent="新增代辦事項"
-        onChange={(e) => setNewItem(e.target.value)}
+        onChange={onChange}
       />
-      <button className="w-10 -ms-11">
-        <img src={plusBtn} className="w-full" onClick={handleClick} />
+      <button className="w-10 -ms-11" onClick={onClick}>
+        <img src={plusBtn} className="w-full" />
       </button>
     </div>
   );
@@ -34,21 +29,25 @@ function AddItem() {
 export default function ToDoList() {
   const { toDoListItem } = useLoaderData();
 
-  // const [newData, setNewData] = useState([]);
+  const [newData, setNewData] = useState(toDoListItem);
+  const [newItem, setNewItem] = useState("");
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const result = await fetch(
-  //       "https://fathomless-brushlands-42339.herokuapp.com/todo2"
-  //     )
-  //       .then((res) => res.json())
-  //       .then((result) => {
-  //         setToDoListData(result);
-  //         console.log(result);
-  //       });
-  //   };
-  //   fetchData();
-  // }, []);
+  async function handleClick() {
+    const add = await addToDoListItem(token, newItem);
+    setNewItem("");
+    const res = await fetch(`https://todoo.5xcamp.us/todos`, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    });
+    let data = await res.json();
+    setNewData(data);
+  }
+
+  function handleChange(e) {
+    setNewItem(e.target.value);
+  }
 
   return (
     <section
@@ -59,9 +58,13 @@ export default function ToDoList() {
     >
       <Container>
         <Header />
-        <AddItem />
-        {toDoListItem.todos.length > 0 ? (
-          <ToDoListContainer itemLists={toDoListItem.todos} />
+        <AddItem
+          onClick={handleClick}
+          onChange={handleChange}
+          newItem={newItem}
+        />
+        {newData.todos.length ? (
+          <ToDoListContainer itemLists={newData.todos} />
         ) : (
           <ToDoListEmpty />
         )}
@@ -82,7 +85,6 @@ function ToDoListEmpty() {
 }
 
 export async function loader() {
-  const token = localStorage.getItem("user-token");
   const toDoListItem = await getToDoList(token);
   return { toDoListItem };
 }
