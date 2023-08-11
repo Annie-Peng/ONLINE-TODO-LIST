@@ -83,3 +83,19 @@ export function postUser(value) {
       return result;
     });
 }
+
+//完成項目
+export function completeToDoListItem(token, id) {
+  return fetch(`${URL}todos/${id}/toggle`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      console.log(result);
+      return result;
+    });
+}
