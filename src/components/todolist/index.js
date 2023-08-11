@@ -33,15 +33,14 @@ export default function ToDoList() {
   const [newItem, setNewItem] = useState("");
 
   async function handleClick() {
-    const add = await addToDoListItem(token, newItem);
-    setNewItem("");
+    await addToDoListItem(token, newItem);
     const res = await fetch(`https://todoo.5xcamp.us/todos`, {
       method: "GET",
       headers: {
         Authorization: token,
       },
     });
-    let data = await res.json();
+    const data = await res.json();
     setNewData(data);
   }
 

@@ -2,7 +2,6 @@ const URL = "https://todoo.5xcamp.us/";
 
 //得到項目
 export function getToDoList(token) {
-  // console.log(token);
   return fetch(`${URL}todos`, {
     method: "GET",
     headers: {
@@ -29,12 +28,7 @@ export function addToDoListItem(token, value) {
       "Content-Type": "application/json",
       Authorization: token,
     },
-  })
-    .then((res) => res.json())
-    .then((result) => {
-      console.log(result);
-      return result;
-    });
+  });
 }
 
 //刪除項目
@@ -70,18 +64,13 @@ export function patchToDoListItem(token, value, id) {
 
 //註冊帳號
 export function postUser(value) {
-  fetch(`${URL}users`, {
+  return fetch(`${URL}users`, {
     method: "POST",
     body: JSON.stringify(value),
     headers: {
       "Content-Type": "application/json",
     },
-  })
-    .then((res) => res.json())
-    .then((result) => {
-      console.log(result);
-      return result;
-    });
+  });
 }
 
 //完成項目
@@ -98,4 +87,23 @@ export function completeToDoListItem(token, id) {
       console.log(result);
       return result;
     });
+}
+
+//登入帳號
+export function loginToDoList(cusData) {
+  return fetch(`${URL}users/sign_in`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(cusData),
+  });
+}
+
+//登出帳號
+export function logoutToDoList(token) {
+  return fetch(`${URL}users/sign_out`, {
+    method: "DELETE",
+    headers: {
+      Authorization: token,
+    },
+  });
 }
