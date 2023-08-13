@@ -3,7 +3,7 @@ import ToDoListContainer from "./ToDoListContainer";
 import Container from "../common/Container";
 import { Input } from "../common/FormInput";
 import plusBtn from "../../images/btn/plusBtn.png";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { addToDoListItem, getToDoList } from "../common/api";
 import coverPic2 from "../../images/cover/coverPic2.png";
 import { useLoaderData } from "react-router-dom";
