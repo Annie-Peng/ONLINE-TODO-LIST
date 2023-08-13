@@ -9,13 +9,20 @@ import { token } from "./index";
 
 const titleList = ["全部", "待完成", "已完成"];
 
-function ToDoListTitle({ onClick }) {
+function ToDoListTitle({ onClick, isSelectTitleStyle }) {
+  const unClickedStyle =
+    "py-4 border-b border-line text-sm font-bold w-full text-tertiary";
+  const clickedStyle =
+    "py-4 border-b border-secondary text-sm font-bold w-full text-secondary";
+
   return (
     <div className="toDoListTitle flex">
       {titleList.map((title, index) => (
         <button
           key={index}
-          className="py-4 border-b border-line text-sm font-bold w-full text-tertiary"
+          className={
+            isSelectTitleStyle === index ? clickedStyle : unClickedStyle
+          }
           onClick={() => onClick(index)}
         >
           {title}
@@ -125,8 +132,7 @@ function ToDoListContent({ selectData, setSelectData }) {
 
 export default function ToDoListContainer({ itemLists, setNewData }) {
   const [selectData, setSelectData] = useState(itemLists);
-
-  console.log(itemLists);
+  const [isSelectTitleStyle, setIsSelectTitleStyle] = useState(false);
 
   useEffect(() => {
     setSelectData(itemLists);
@@ -138,19 +144,23 @@ export default function ToDoListContainer({ itemLists, setNewData }) {
     let value;
     if (index === 1) {
       value = newItemLists.filter((item) => !item["completed_at"]);
-      console.log(value);
+      setIsSelectTitleStyle(1);
     } else if (index === 2) {
       value = newItemLists.filter((item) => item["completed_at"]);
-      console.log(value);
+      setIsSelectTitleStyle(2);
     } else {
       value = newItemLists;
+      setIsSelectTitleStyle(0);
     }
     setSelectData(value);
   }
 
   return (
     <div className="w-[500px] mt-4 bg-white rounded-[10px] shadow-[0_0_15px_0] shadow-tertiary mx-auto">
-      <ToDoListTitle onClick={handleRenderItemClick} />
+      <ToDoListTitle
+        onClick={handleRenderItemClick}
+        isSelectTitleStyle={isSelectTitleStyle}
+      />
       <ToDoListContent selectData={selectData} setSelectData={setSelectData} />
     </div>
   );
