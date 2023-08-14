@@ -55,7 +55,7 @@ export default function ToDoList() {
       className="pt-4 pl-[34px] pr-8"
     >
       <Container>
-        <Header userName={userName} />
+        <Header userName={userName} token={token} />
         <AddItem
           onClick={handleClick}
           onChange={handleChange}
