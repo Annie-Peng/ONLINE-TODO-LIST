@@ -5,7 +5,6 @@ import {
   completeToDoListItem,
   getToDoList,
 } from "../common/api";
-import { token } from "./index";
 
 const titleList = ["全部", "待完成", "已完成"];
 
@@ -32,7 +31,7 @@ function ToDoListTitle({ onClick, isSelectTitleStyle }) {
   );
 }
 
-function ToDoListContent({ selectData, setSelectData }) {
+function ToDoListContent({ selectData, setSelectData, token }) {
   const [renderUncompleteNum, setRenderUncompleteNum] = useState(selectData);
 
   useEffect(() => {
@@ -152,7 +151,7 @@ function ToDoListContent({ selectData, setSelectData }) {
   );
 }
 
-export default function ToDoListContainer({ itemLists, setNewData }) {
+export default function ToDoListContainer({ itemLists, token }) {
   const [selectData, setSelectData] = useState(itemLists);
   const [isSelectTitleStyle, setIsSelectTitleStyle] = useState(0);
 
@@ -183,7 +182,11 @@ export default function ToDoListContainer({ itemLists, setNewData }) {
         onClick={handleRenderItemClick}
         isSelectTitleStyle={isSelectTitleStyle}
       />
-      <ToDoListContent selectData={selectData} setSelectData={setSelectData} />
+      <ToDoListContent
+        selectData={selectData}
+        setSelectData={setSelectData}
+        token={token}
+      />
     </div>
   );
 }

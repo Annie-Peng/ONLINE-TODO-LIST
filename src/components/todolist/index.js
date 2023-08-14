@@ -3,12 +3,10 @@ import ToDoListContainer from "./ToDoListContainer";
 import Container from "../common/Container";
 import { Input } from "../common/FormInput";
 import plusBtn from "../../images/btn/plusBtn.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { addToDoListItem, getToDoList } from "../common/api";
 import coverPic2 from "../../images/cover/coverPic2.png";
 import { useLoaderData } from "react-router-dom";
-
-export const token = localStorage.getItem("user-token");
 
 function AddItem({ onClick, onChange, newItem }) {
   return (
@@ -28,7 +26,7 @@ function AddItem({ onClick, onChange, newItem }) {
 
 export default function ToDoList() {
   const { toDoListItem } = useLoaderData();
-
+  const token = localStorage.getItem("user-token");
   const [newData, setNewData] = useState(toDoListItem);
   const [newItem, setNewItem] = useState("");
 
@@ -63,7 +61,7 @@ export default function ToDoList() {
           newItem={newItem}
         />
         {newData.todos.length ? (
-          <ToDoListContainer itemLists={newData.todos} />
+          <ToDoListContainer itemLists={newData.todos} token={token} />
         ) : (
           <ToDoListEmpty />
         )}
@@ -84,6 +82,7 @@ function ToDoListEmpty() {
 }
 
 export async function loader() {
+  const token = localStorage.getItem("user-token");
   const toDoListItem = await getToDoList(token);
   return { toDoListItem };
 }
