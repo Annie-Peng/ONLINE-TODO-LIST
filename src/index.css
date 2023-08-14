@@ -24,32 +24,26 @@ body {
   position: absolute;
   content: "";
   background-image: url("./images/btn/vectorCross.png");
+  background-repeat: no-repeat;
   top: 0;
   right: 0;
   width: 16px;
   height: 16px;
+  margin-top: 4px;
 }
 
 .vectorChecked::before {
   position: relative;
   content: "";
   background-image: url("./images/btn/vectorChecked.png");
+  background-repeat: no-repeat;
   display: block;
   width: 18px;
   height: 18px;
+  margin-top: 2px;
   margin-right: 18px;
 }
 
-/* body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+input {
+  outline: none;
 }
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-} */

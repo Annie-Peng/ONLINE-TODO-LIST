@@ -2,6 +2,7 @@ import { useState } from "react";
 import MainBtn from "../common/MainBtn.js";
 import FormInput from "../common/FormInput.js";
 import { Link, redirect, Form } from "react-router-dom";
+import { postUser } from "../common/api.js";
 
 export default function Register() {
   const [emptyStatus, setEmptyStatus] = useState({
@@ -106,19 +107,11 @@ export async function action({ request }) {
     },
   };
 
-  const response = await fetch("https://todoo.5xcamp.us/users", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(cusData),
+  return postUser(cusData).then((res) => {
+    if (res.ok) {
+      return redirect("/ONLINE-TODO-LIST/");
+    } else {
+      return null;
+    }
   });
-
-  // console.log(response);
-
-  console.log(response.headers.get("Authorization")); //取得token
-
-  if (response.ok) {
-    return redirect("/ONLINE-TODO-LIST/");
-  } else {
-    return null;
-  }
 }

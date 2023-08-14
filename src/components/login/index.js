@@ -2,6 +2,7 @@ import { useState } from "react";
 import MainBtn from "../common/MainBtn.js";
 import FormInput from "../common/FormInput.js";
 import { Link, Form, redirect } from "react-router-dom";
+import { loginToDoList } from "../common/api";
 
 export default function Login() {
   const [nextCusInfo, setNextCusInfo] = useState({
@@ -68,18 +69,15 @@ export async function action({ request }) {
     },
   };
 
-  const response = await fetch("https://todoo.5xcamp.us/users/sign_in", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(cusData),
+  return loginToDoList(cusData).then((res) => {
+    if (res.ok) {
+      const token = res.headers.get("Authorization");
+      localStorage.setItem("user-token", token);
+      console.log(token);
+      return redirect(`/ONLINE-TODO-LIST/todolist/`);
+    } else {
+      alert("帳號或密碼有錯誤，請重新填寫");
+      return null;
+    }
   });
-
-  const token = response.headers.get("Authorization");
-
-  if (response.ok) {
-    localStorage.setItem("user-token", token);
-    return redirect(`/ONLINE-TODO-LIST/todolist/`);
-  } else {
-    return null;
-  }
 }

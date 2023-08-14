@@ -3,18 +3,27 @@ import {
   patchToDoListItem,
   deleteToDoListItem,
   completeToDoListItem,
+  getToDoList,
 } from "../common/api";
 import { token } from "./index";
 
 const titleList = ["全部", "待完成", "已完成"];
 
-function ToDoListTitle() {
+function ToDoListTitle({ onClick, isSelectTitleStyle }) {
+  const unClickedStyle =
+    "py-4 border-b border-line text-sm font-bold w-full text-tertiary";
+  const clickedStyle =
+    "py-4 border-b-2 border-secondary text-sm font-bold w-full text-secondary";
+
   return (
     <div className="toDoListTitle flex">
       {titleList.map((title, index) => (
         <button
           key={index}
-          className="py-4 border-b border-line text-sm font-bold w-full text-tertiary"
+          className={
+            isSelectTitleStyle === index ? clickedStyle : unClickedStyle
+          }
+          onClick={() => onClick(index)}
         >
           {title}
         </button>
@@ -23,15 +32,18 @@ function ToDoListTitle() {
   );
 }
 
-function ToDoListContent({ itemLists }) {
-  const [updateToDoList, setUpdateToDoList] = useState(itemLists);
+function ToDoListContent({ selectData, setSelectData }) {
+  const [renderUncompleteNum, setRenderUncompleteNum] = useState(selectData);
 
   useEffect(() => {
-    setUpdateToDoList(itemLists);
-  }, [itemLists]);
+    const nextRenderUncompleteNum = selectData.filter(
+      (item) => !item["completed_at"]
+    );
+    setRenderUncompleteNum(nextRenderUncompleteNum);
+  }, [selectData]);
 
   function handleChange(e, id) {
-    const result = updateToDoList.map((item) => {
+    const result = selectData.map((item) => {
       if (item.id === id) {
         let value = {
           ...item,
@@ -46,7 +58,7 @@ function ToDoListContent({ itemLists }) {
       }
     });
     const newResult = result.filter((item) => item.id);
-    setUpdateToDoList(newResult);
+    setSelectData(newResult);
   }
 
   function deleteIdItem(token, id) {
@@ -55,14 +67,14 @@ function ToDoListContent({ itemLists }) {
   }
 
   function handleDeleteClick(id) {
-    const result = updateToDoList.filter((item) => item.id !== id);
+    const result = selectData.filter((item) => item.id !== id);
     deleteIdItem(token, id);
-    setUpdateToDoList(result);
+    setSelectData(result);
   }
 
   function handleCompleteClick(id) {
     const result = Promise.all(
-      updateToDoList.map(async (item) => {
+      selectData.map(async (item) => {
         if (item.id === id) {
           const toggle = await completeToDoListItem(token, id);
           // console.log(toggle);
@@ -73,13 +85,13 @@ function ToDoListContent({ itemLists }) {
       })
     );
     result.then((newResult) => {
-      setUpdateToDoList(newResult);
+      setSelectData(newResult);
     });
   }
 
   // async function handleCompleteClick(id) {
   //   const result = await Promise.all(
-  //     updateToDoList.map(async (item) => {
+  //     selectData.map(async (item) => {
   //       if (item.id === id) {
   //         const toggle = await completeToDoListItem(token, id);
   //         // console.log(toggle);
@@ -89,13 +101,13 @@ function ToDoListContent({ itemLists }) {
   //       }
   //     })
   //   );
-  //   setUpdateToDoList(result);
+  //   setselectData(result);
   // }
 
   return (
     <div className="toDoListContent p-6 flex flex-col gap-y-4">
       <ul className="flex flex-col gap-y-4 relative">
-        {updateToDoList.map((item) => (
+        {selectData.map((item) => (
           <Fragment key={item.id}>
             <li className="border-b border-line pb-4 flex text-sm relative">
               <span
@@ -120,18 +132,47 @@ function ToDoListContent({ itemLists }) {
         ))}
       </ul>
       <p className="py-2 flex justify-between">
-        <span className="text-sm">{updateToDoList.length} 個待完成項目</span>
+        <span className="text-sm">
+          {renderUncompleteNum.length} 個待完成項目
+        </span>
         <button className="text-sm text-tertiary">清除已完成項目</button>
       </p>
     </div>
   );
 }
 
-export default function ToDoListContainer({ itemLists }) {
+export default function ToDoListContainer({ itemLists, setNewData }) {
+  const [selectData, setSelectData] = useState(itemLists);
+  const [isSelectTitleStyle, setIsSelectTitleStyle] = useState(0);
+
+  useEffect(() => {
+    setSelectData(itemLists);
+  }, [itemLists]);
+
+  async function handleRenderItemClick(index) {
+    const result = await getToDoList(token);
+    const newItemLists = result.todos;
+    let value;
+    if (index === 1) {
+      value = newItemLists.filter((item) => !item["completed_at"]);
+      setIsSelectTitleStyle(1);
+    } else if (index === 2) {
+      value = newItemLists.filter((item) => item["completed_at"]);
+      setIsSelectTitleStyle(2);
+    } else {
+      value = newItemLists;
+      setIsSelectTitleStyle(0);
+    }
+    setSelectData(value);
+  }
+
   return (
     <div className="w-[500px] mt-4 bg-white rounded-[10px] shadow-[0_0_15px_0] shadow-tertiary mx-auto">
-      <ToDoListTitle />
-      <ToDoListContent itemLists={itemLists} />
+      <ToDoListTitle
+        onClick={handleRenderItemClick}
+        isSelectTitleStyle={isSelectTitleStyle}
+      />
+      <ToDoListContent selectData={selectData} setSelectData={setSelectData} />
     </div>
   );
 }

@@ -3,7 +3,7 @@ import ToDoListContainer from "./ToDoListContainer";
 import Container from "../common/Container";
 import { Input } from "../common/FormInput";
 import plusBtn from "../../images/btn/plusBtn.png";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { addToDoListItem, getToDoList } from "../common/api";
 import coverPic2 from "../../images/cover/coverPic2.png";
 import { useLoaderData } from "react-router-dom";
@@ -33,15 +33,14 @@ export default function ToDoList() {
   const [newItem, setNewItem] = useState("");
 
   async function handleClick() {
-    const add = await addToDoListItem(token, newItem);
-    setNewItem("");
+    await addToDoListItem(token, newItem);
     const res = await fetch(`https://todoo.5xcamp.us/todos`, {
       method: "GET",
       headers: {
         Authorization: token,
       },
     });
-    let data = await res.json();
+    const data = await res.json();
     setNewData(data);
   }
 
