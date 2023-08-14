@@ -27,6 +27,7 @@ function AddItem({ onClick, onChange, newItem }) {
 export default function ToDoList() {
   const { toDoListItem } = useLoaderData();
   const token = localStorage.getItem("user-token");
+  const userName = localStorage.getItem("user-name");
   const [newData, setNewData] = useState(toDoListItem);
   const [newItem, setNewItem] = useState("");
 
@@ -54,7 +55,7 @@ export default function ToDoList() {
       className="pt-4 pl-[34px] pr-8"
     >
       <Container>
-        <Header />
+        <Header userName={userName} />
         <AddItem
           onClick={handleClick}
           onChange={handleChange}
