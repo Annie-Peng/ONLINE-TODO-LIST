@@ -5,7 +5,6 @@ import {
   completeToDoListItem,
   getToDoList,
 } from "../common/api";
-import { token } from "./index";
 
 const titleList = ["全部", "待完成", "已完成"];
 
@@ -32,7 +31,7 @@ function ToDoListTitle({ onClick, isSelectTitleStyle }) {
   );
 }
 
-function ToDoListContent({ selectData, setSelectData }) {
+function ToDoListContent({ selectData, setSelectData, token }) {
   const [renderUncompleteNum, setRenderUncompleteNum] = useState(selectData);
 
   useEffect(() => {
@@ -67,8 +66,17 @@ function ToDoListContent({ selectData, setSelectData }) {
   }
 
   function handleDeleteClick(id) {
-    const result = selectData.filter((item) => item.id !== id);
-    deleteIdItem(token, id);
+    const checkTypeOfId = typeof id;
+    let result;
+    if (checkTypeOfId === "string") {
+      console.log("ys");
+      result = selectData.filter((item) => item.id !== id);
+      deleteIdItem(token, id);
+    } else {
+      result = selectData.filter((item) => !item["completed_at"]);
+      const completedItems = selectData.filter((item) => item["completed_at"]);
+      completedItems.forEach((item) => deleteIdItem(token, item.id));
+    }
     setSelectData(result);
   }
 
@@ -135,13 +143,15 @@ function ToDoListContent({ selectData, setSelectData }) {
         <span className="text-sm">
           {renderUncompleteNum.length} 個待完成項目
         </span>
-        <button className="text-sm text-tertiary">清除已完成項目</button>
+        <button className="text-sm text-tertiary" onClick={handleDeleteClick}>
+          清除已完成項目
+        </button>
       </p>
     </div>
   );
 }
 
-export default function ToDoListContainer({ itemLists, setNewData }) {
+export default function ToDoListContainer({ itemLists, token }) {
   const [selectData, setSelectData] = useState(itemLists);
   const [isSelectTitleStyle, setIsSelectTitleStyle] = useState(0);
 
@@ -172,7 +182,11 @@ export default function ToDoListContainer({ itemLists, setNewData }) {
         onClick={handleRenderItemClick}
         isSelectTitleStyle={isSelectTitleStyle}
       />
-      <ToDoListContent selectData={selectData} setSelectData={setSelectData} />
+      <ToDoListContent
+        selectData={selectData}
+        setSelectData={setSelectData}
+        token={token}
+      />
     </div>
   );
 }

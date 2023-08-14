@@ -73,7 +73,8 @@ export async function action({ request }) {
     if (res.ok) {
       const token = res.headers.get("Authorization");
       localStorage.setItem("user-token", token);
-      console.log(token);
+      const data = res.json();
+      data.then((result) => localStorage.setItem("user-name", result.nickname));
       return redirect(`/ONLINE-TODO-LIST/todolist/`);
     } else {
       alert("帳號或密碼有錯誤，請重新填寫");
