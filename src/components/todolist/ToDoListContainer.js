@@ -67,8 +67,17 @@ function ToDoListContent({ selectData, setSelectData }) {
   }
 
   function handleDeleteClick(id) {
-    const result = selectData.filter((item) => item.id !== id);
-    deleteIdItem(token, id);
+    const checkTypeOfId = typeof id;
+    let result;
+    if (checkTypeOfId === "string") {
+      console.log("ys");
+      result = selectData.filter((item) => item.id !== id);
+      deleteIdItem(token, id);
+    } else {
+      result = selectData.filter((item) => !item["completed_at"]);
+      const completedItems = selectData.filter((item) => item["completed_at"]);
+      completedItems.forEach((item) => deleteIdItem(token, item.id));
+    }
     setSelectData(result);
   }
 
@@ -135,7 +144,9 @@ function ToDoListContent({ selectData, setSelectData }) {
         <span className="text-sm">
           {renderUncompleteNum.length} 個待完成項目
         </span>
-        <button className="text-sm text-tertiary">清除已完成項目</button>
+        <button className="text-sm text-tertiary" onClick={handleDeleteClick}>
+          清除已完成項目
+        </button>
       </p>
     </div>
   );
