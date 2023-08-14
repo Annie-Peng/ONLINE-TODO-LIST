@@ -13,7 +13,7 @@ function ToDoListTitle({ onClick, isSelectTitleStyle }) {
   const unClickedStyle =
     "py-4 border-b border-line text-sm font-bold w-full text-tertiary";
   const clickedStyle =
-    "py-4 border-b border-secondary text-sm font-bold w-full text-secondary";
+    "py-4 border-b-2 border-secondary text-sm font-bold w-full text-secondary";
 
   return (
     <div className="toDoListTitle flex">
@@ -33,6 +33,15 @@ function ToDoListTitle({ onClick, isSelectTitleStyle }) {
 }
 
 function ToDoListContent({ selectData, setSelectData }) {
+  const [renderUncompleteNum, setRenderUncompleteNum] = useState(selectData);
+
+  useEffect(() => {
+    const nextRenderUncompleteNum = selectData.filter(
+      (item) => !item["completed_at"]
+    );
+    setRenderUncompleteNum(nextRenderUncompleteNum);
+  }, [selectData]);
+
   function handleChange(e, id) {
     const result = selectData.map((item) => {
       if (item.id === id) {
@@ -123,7 +132,9 @@ function ToDoListContent({ selectData, setSelectData }) {
         ))}
       </ul>
       <p className="py-2 flex justify-between">
-        <span className="text-sm">{selectData.length} 個待完成項目</span>
+        <span className="text-sm">
+          {renderUncompleteNum.length} 個待完成項目
+        </span>
         <button className="text-sm text-tertiary">清除已完成項目</button>
       </p>
     </div>
@@ -132,7 +143,7 @@ function ToDoListContent({ selectData, setSelectData }) {
 
 export default function ToDoListContainer({ itemLists, setNewData }) {
   const [selectData, setSelectData] = useState(itemLists);
-  const [isSelectTitleStyle, setIsSelectTitleStyle] = useState(false);
+  const [isSelectTitleStyle, setIsSelectTitleStyle] = useState(0);
 
   useEffect(() => {
     setSelectData(itemLists);
