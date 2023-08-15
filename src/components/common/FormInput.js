@@ -10,7 +10,7 @@ export function Input({ name, value, showContent, onChange }) {
   );
 }
 
-export default function FormInput({ name, content, value, onChange }) {
+export default function FormInput({ name, content, value, onChange, onBlur }) {
   return (
     <label>
       <p className="mt-4 mb-1 text-sm font-bold">{content}</p>

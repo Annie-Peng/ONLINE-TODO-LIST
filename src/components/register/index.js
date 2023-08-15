@@ -3,6 +3,7 @@ import MainBtn from "../common/MainBtn.js";
 import FormInput from "../common/FormInput.js";
 import { Link, redirect, Form } from "react-router-dom";
 import { postUser } from "../common/api.js";
+import { useForm, Controller } from "react-hook-form";
 
 export default function Register() {
   const [emptyStatus, setEmptyStatus] = useState({
@@ -16,6 +17,16 @@ export default function Register() {
     name: "",
     password: "",
     rePassword: "",
+  });
+
+  const {
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm({
+    defaultValues: {
+      email: "",
+    },
   });
 
   function handleChange(e) {
@@ -51,16 +62,27 @@ export default function Register() {
   return (
     <div className="w-[304px]">
       <h3 className="font-bold text-2xl">註冊帳號</h3>
-      <Form method="post">
-        <FormInput
-          content="Email"
+      <Form method="post" onSubmit={handleSubmit((data) => console.log(data))}>
+        <Controller
+          control={control}
           name="email"
-          value={nextCusInfo.email}
-          onChange={handleChange}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <>
+              <FormInput
+                content="Email"
+                name={field.name}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+              />
+              {errors.email && (
+                <p className="text-warning text-sm font-bold">此欄位不可為空</p>
+              )}
+            </>
+          )}
         />
-        {emptyStatus.email && (
-          <p className="text-warning text-sm font-bold">此欄位不可為空</p>
-        )}
+
         <FormInput
           content="您的暱稱"
           name="name"
