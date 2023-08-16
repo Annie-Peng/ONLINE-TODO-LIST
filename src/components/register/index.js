@@ -49,7 +49,7 @@ export default function Register() {
 
     const res = await postUser(cusData);
     const jsonData = await res.json();
-    const newData = jsonData.error.toString();
+    const newData = jsonData.toString();
     newData === "電子信箱 已被使用" &&
       setError("emailRegisterError", {
         type: "422",
@@ -57,6 +57,7 @@ export default function Register() {
       });
 
     if (res.ok) {
+      alert("註冊成功！請重新登入 ：）");
       return navigate("/ONLINE-TODO-LIST/");
     } else {
       return null;
