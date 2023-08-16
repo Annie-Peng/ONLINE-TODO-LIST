@@ -1,4 +1,4 @@
-export function Input({ name, value, placeholder, onChange }) {
+export function Input({ name, value, placeholder, onChange, type }) {
   return (
     <input
       className="peer py-3 px-4 rounded-[10px] placeholder:text-tertiary text-medium w-full"
@@ -6,6 +6,7 @@ export function Input({ name, value, placeholder, onChange }) {
       value={value}
       placeholder={placeholder}
       onChange={onChange}
+      type={type}
     />
   );
 }
@@ -17,6 +18,7 @@ export default function FormInput({
   onChange,
   onBlur,
   placeholder,
+  type,
 }) {
   return (
     <label>
@@ -27,6 +29,7 @@ export default function FormInput({
         showContent={content}
         onChange={onChange}
         placeholder={placeholder}
+        type={type}
       />
     </label>
   );
