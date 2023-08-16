@@ -31,7 +31,12 @@ function ToDoListTitle({ onClick, isSelectTitleStyle }) {
   );
 }
 
-function ToDoListContent({ selectData, setSelectData, token }) {
+function ToDoListContent({
+  selectData,
+  setSelectData,
+  token,
+  isSelectTitleStyle,
+}) {
   const [renderUncompleteNum, setRenderUncompleteNum] = useState(selectData);
 
   useEffect(() => {
@@ -93,7 +98,10 @@ function ToDoListContent({ selectData, setSelectData, token }) {
       })
     );
     result.then((newResult) => {
-      setSelectData(newResult);
+      const nextNewResult = newResult.filter((item) => {
+        return isSelectTitleStyle !== 0 ? item.id !== id : item;
+      });
+      setSelectData(nextNewResult);
     });
   }
 
@@ -186,6 +194,7 @@ export default function ToDoListContainer({ itemLists, token }) {
         selectData={selectData}
         setSelectData={setSelectData}
         token={token}
+        isSelectTitleStyle={isSelectTitleStyle}
       />
     </div>
   );
