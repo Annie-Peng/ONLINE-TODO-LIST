@@ -9,6 +9,7 @@ module.exports = {
       tertiary: "#9F9A91",
       warning: "#D87355",
       white: "#FFFFFF",
+      line: "#E5E5E5",
     },
     fontFamily: {
       sans: ["Noto Sans TC"],
