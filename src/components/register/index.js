@@ -66,7 +66,14 @@ export default function Register() {
         <Controller
           control={control}
           name="email"
-          rules={{ required: true }}
+          rules={{
+            required: "此欄位不可為空",
+            pattern: {
+              value:
+                /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/,
+              message: "請輸入正確email格式",
+            },
+          }}
           render={({ field }) => (
             <>
               <FormInput
@@ -76,11 +83,20 @@ export default function Register() {
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 placeholder="請輸入Email"
-                type="text"
+                type="email"
               />
-              {errors.email && (
-                <p className="text-warning text-sm font-bold">此欄位不可為空</p>
-              )}
+              <ErrorMessage
+                errors={errors}
+                name="email"
+                render={({ messages }) =>
+                  messages &&
+                  Object.entries(messages).map(([type, message]) => (
+                    <p key={type} className="text-warning text-sm font-bold">
+                      {message}
+                    </p>
+                  ))
+                }
+              />
             </>
           )}
         />
