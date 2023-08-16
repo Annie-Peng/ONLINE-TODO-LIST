@@ -47,17 +47,38 @@ export default function Register() {
     };
     console.log(cusData);
 
-    await postUser(cusData).then((res) => {
-      console.log(res);
-      if (res.ok) {
-        console.log("yes");
-        return navigate("/ONLINE-TODO-LIST/");
-      } else {
-        console.log("no");
-        return null;
-      }
-    });
+    const res = await postUser(cusData);
+    const jsonData = await res.json();
+    const newData = jsonData.error.toString();
+    newData === "電子信箱 已被使用" &&
+      setError("emailRegisterError", {
+        type: "422",
+        message: "電子信箱已經註冊",
+      });
+
+    if (res.ok) {
+      return navigate("/ONLINE-TODO-LIST/");
+    } else {
+      return null;
+    }
+
+    // .then((res) => {
+    //   console.log(res);
+    //   const response = res.json();
+    //   const data = response;
+
+    //   console.log(data);
+    //   if (res.ok) {
+    //     console.log("yes");
+    //     return navigate("/ONLINE-TODO-LIST/");
+    //   } else {
+    //     console.log("no");
+    //     return null;
+    //   }
+    // });
   }
+
+  // console.log(errors.emailRegisterError.type);
 
   return (
     <div className="w-[304px]">
@@ -97,6 +118,11 @@ export default function Register() {
                   ))
                 }
               />
+              {errors.emailRegisterError && (
+                <p className="text-warning text-sm font-bold">
+                  {errors.emailRegisterError.message}
+                </p>
+              )}
             </>
           )}
         />
