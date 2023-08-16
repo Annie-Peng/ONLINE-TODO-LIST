@@ -41,6 +41,7 @@ export default function ToDoList() {
     });
     const data = await res.json();
     setNewData(data);
+    setNewItem("");
   }
 
   function handleChange(e) {
