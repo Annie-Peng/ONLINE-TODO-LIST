@@ -30,6 +30,7 @@ export default function ToDoList() {
   const userName = localStorage.getItem("user-name");
   const [newData, setNewData] = useState(toDoListItem);
   const [newItem, setNewItem] = useState("");
+  const [isSelectTitleStyle, setIsSelectTitleStyle] = useState(0);
 
   async function handleClick() {
     await addToDoListItem(token, newItem);
@@ -40,7 +41,8 @@ export default function ToDoList() {
       },
     });
     const data = await res.json();
-    setNewData(data);
+    const nextData = renderSelectTitleItem(isSelectTitleStyle, data);
+    setNewData(nextData);
     setNewItem("");
   }
 
@@ -63,7 +65,12 @@ export default function ToDoList() {
           newItem={newItem}
         />
         {newData.todos.length ? (
-          <ToDoListContainer itemLists={newData.todos} token={token} />
+          <ToDoListContainer
+            itemLists={newData.todos}
+            token={token}
+            isSelectTitleStyle={isSelectTitleStyle}
+            setIsSelectTitleStyle={setIsSelectTitleStyle}
+          />
         ) : (
           <ToDoListEmpty />
         )}
@@ -87,4 +94,17 @@ export async function loader() {
   const token = localStorage.getItem("user-token");
   const toDoListItem = await getToDoList(token);
   return { toDoListItem };
+}
+
+export function renderSelectTitleItem(index, data) {
+  let newData = {};
+  if (index === 1) {
+    newData["todos"] = data["todos"].filter((item) => !item["completed_at"]);
+    console.log(newData);
+  } else if (index === 2) {
+    newData["todos"] = data["todos"].filter((item) => item["completed_at"]);
+  } else {
+    newData = data;
+  }
+  return newData;
 }
