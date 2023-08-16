@@ -1,9 +1,9 @@
-import { useState } from "react";
 import MainBtn from "../common/MainBtn.js";
 import FormInput from "../common/FormInput.js";
-import { Link, redirect, Form } from "react-router-dom";
+import { Link, redirect, Form, useNavigate } from "react-router-dom";
 import { postUser } from "../common/api.js";
 import { useForm, Controller } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 
 export default function Register() {
   const {
@@ -11,6 +11,7 @@ export default function Register() {
     formState: { errors },
     control,
     setError,
+    watch,
   } = useForm({
     defaultValues: {
       email: "",
@@ -20,6 +21,8 @@ export default function Register() {
     },
     criteriaMode: "all",
   });
+
+  const navigate = useNavigate();
 
   // const onSubmit = async (data) => {
   //   const response = await postUser(data);
@@ -34,10 +37,32 @@ export default function Register() {
   // };
   // console.log(errors.errorType);
 
+  async function onSubmit(data) {
+    const cusData = {
+      user: {
+        email: data.email,
+        nickname: data.name,
+        password: data.password,
+      },
+    };
+    console.log(cusData);
+
+    await postUser(cusData).then((res) => {
+      console.log(res);
+      if (res.ok) {
+        console.log("yes");
+        return navigate("/ONLINE-TODO-LIST/");
+      } else {
+        console.log("no");
+        return null;
+      }
+    });
+  }
+
   return (
     <div className="w-[304px]">
       <h3 className="font-bold text-2xl">註冊帳號</h3>
-      <Form method="post" onSubmit={handleSubmit((data) => console.log(data))}>
+      <Form method="post" onSubmit={handleSubmit(onSubmit)}>
         <Controller
           control={control}
           name="email"
@@ -46,11 +71,12 @@ export default function Register() {
             <>
               <FormInput
                 content="Email"
-                name={field.email}
+                name="email"
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 placeholder="請輸入Email"
+                type="text"
               />
               {errors.email && (
                 <p className="text-warning text-sm font-bold">此欄位不可為空</p>
@@ -66,11 +92,12 @@ export default function Register() {
             <>
               <FormInput
                 content="您的暱稱"
-                name={field.name}
+                name="name"
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 placeholder="請輸入您的暱稱"
+                type="text"
               />
               {errors.name && (
                 <p className="text-warning text-sm font-bold">此欄位不可為空</p>
@@ -92,35 +119,61 @@ export default function Register() {
             <>
               <FormInput
                 content="密碼"
-                name={field.password}
+                name="password"
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 placeholder="請輸入密碼"
+                type="password"
               />
-              {errors.password && (
-                <p className="text-warning text-sm font-bold">此欄位不可為空</p>
-              )}
+              <ErrorMessage
+                errors={errors}
+                name="password"
+                render={({ messages }) =>
+                  messages &&
+                  Object.entries(messages).map(([type, message]) => (
+                    <p key={type} className="text-warning text-sm font-bold">
+                      {message}
+                    </p>
+                  ))
+                }
+              />
             </>
           )}
         />
         <Controller
           control={control}
           name="rePassword"
-          rules={{ required: true }}
+          rules={{
+            required: "此欄位不可為空",
+            validate: {
+              message: (value) =>
+                value === watch("password") ? null : "與輸入密碼不符",
+            },
+          }}
           render={({ field }) => (
             <>
               <FormInput
                 content="再次輸入密碼"
-                name={field.rePassword}
+                name="rePassword"
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 placeholder="請再次輸入密碼"
+                type="password"
               />
-              {errors.rePassword && (
-                <p className="text-warning text-sm font-bold">此欄位不可為空</p>
-              )}
+              <ErrorMessage
+                errors={errors}
+                name="rePassword"
+                render={({ messages }) =>
+                  messages &&
+                  Object.entries(messages).map(([type, message]) => (
+                    <p key={type} className="text-warning text-sm font-bold">
+                      {message}
+                    </p>
+                  ))
+                }
+              />
             </>
           )}
         />
@@ -134,6 +187,7 @@ export default function Register() {
 }
 
 export async function action({ request }) {
+  console.log(request);
   const data = await request.formData();
   const cusData = {
     user: {
