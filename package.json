@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://annie-peng.github.io/ONLINE-TODO-LIST",
   "dependencies": {
+    "@hookform/error-message": "^2.0.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -12,6 +13,7 @@
     "match-sorter": "^6.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.45.4",
     "react-router-dom": "^6.14.2",
     "react-scripts": "5.0.1",
     "sort-by": "^1.2.0",

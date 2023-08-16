@@ -5,6 +5,7 @@ import {
   completeToDoListItem,
   getToDoList,
 } from "../common/api";
+import { renderSelectTitleItem } from "./index";
 
 const titleList = ["全部", "待完成", "已完成"];
 
@@ -31,7 +32,12 @@ function ToDoListTitle({ onClick, isSelectTitleStyle }) {
   );
 }
 
-function ToDoListContent({ selectData, setSelectData, token }) {
+function ToDoListContent({
+  selectData,
+  setSelectData,
+  token,
+  isSelectTitleStyle,
+}) {
   const [renderUncompleteNum, setRenderUncompleteNum] = useState(selectData);
 
   useEffect(() => {
@@ -93,7 +99,10 @@ function ToDoListContent({ selectData, setSelectData, token }) {
       })
     );
     result.then((newResult) => {
-      setSelectData(newResult);
+      const nextNewResult = newResult.filter((item) => {
+        return isSelectTitleStyle !== 0 ? item.id !== id : item;
+      });
+      setSelectData(nextNewResult);
     });
   }
 
@@ -151,9 +160,13 @@ function ToDoListContent({ selectData, setSelectData, token }) {
   );
 }
 
-export default function ToDoListContainer({ itemLists, token }) {
+export default function ToDoListContainer({
+  itemLists,
+  token,
+  isSelectTitleStyle,
+  setIsSelectTitleStyle,
+}) {
   const [selectData, setSelectData] = useState(itemLists);
-  const [isSelectTitleStyle, setIsSelectTitleStyle] = useState(0);
 
   useEffect(() => {
     setSelectData(itemLists);
@@ -161,19 +174,11 @@ export default function ToDoListContainer({ itemLists, token }) {
 
   async function handleRenderItemClick(index) {
     const result = await getToDoList(token);
-    const newItemLists = result.todos;
-    let value;
-    if (index === 1) {
-      value = newItemLists.filter((item) => !item["completed_at"]);
-      setIsSelectTitleStyle(1);
-    } else if (index === 2) {
-      value = newItemLists.filter((item) => item["completed_at"]);
-      setIsSelectTitleStyle(2);
-    } else {
-      value = newItemLists;
-      setIsSelectTitleStyle(0);
-    }
-    setSelectData(value);
+    console.log(token);
+    const nextData = renderSelectTitleItem(index, result);
+    console.log(nextData);
+    setIsSelectTitleStyle(index);
+    setSelectData(nextData.todos);
   }
 
   return (
@@ -186,6 +191,7 @@ export default function ToDoListContainer({ itemLists, token }) {
         selectData={selectData}
         setSelectData={setSelectData}
         token={token}
+        isSelectTitleStyle={isSelectTitleStyle}
       />
     </div>
   );

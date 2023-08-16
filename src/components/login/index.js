@@ -36,6 +36,7 @@ export default function Login() {
           name="email"
           value={nextCusInfo.email}
           onChange={handleChange}
+          placeholder="請輸入Email"
         />
         {isEmptyEmail && (
           <p className="text-warning text-sm font-bold">此欄位不可為空</p>
@@ -45,6 +46,7 @@ export default function Login() {
           name="password"
           value={nextCusInfo.password}
           onChange={handleChange}
+          placeholder="請輸入密碼"
         />
         {isEmptyPassword && (
           <p className="text-warning text-sm font-bold">此欄位不可為空</p>
