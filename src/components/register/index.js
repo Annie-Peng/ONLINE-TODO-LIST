@@ -24,19 +24,6 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  // const onSubmit = async (data) => {
-  //   const response = await postUser(data);
-  //   const jsonData = await response.json();
-  //   console.log(jsonData);
-  //   if (response.status > 200) {
-  //     setError("errorType", {
-  //       type: response.status,
-  //       message: jsonData.message,
-  //     });
-  //   }
-  // };
-  // console.log(errors.errorType);
-
   async function onSubmit(data) {
     const cusData = {
       user: {
@@ -45,12 +32,11 @@ export default function Register() {
         password: data.password,
       },
     };
-    console.log(cusData);
 
     const res = await postUser(cusData);
     const jsonData = await res.json();
-    const newData = jsonData.toString();
-    newData === "電子信箱 已被使用" &&
+    const newData = jsonData.error;
+    newData.toString() === "電子信箱 已被使用" &&
       setError("emailRegisterError", {
         type: "422",
         message: "電子信箱已經註冊",
@@ -62,24 +48,7 @@ export default function Register() {
     } else {
       return null;
     }
-
-    // .then((res) => {
-    //   console.log(res);
-    //   const response = res.json();
-    //   const data = response;
-
-    //   console.log(data);
-    //   if (res.ok) {
-    //     console.log("yes");
-    //     return navigate("/ONLINE-TODO-LIST/");
-    //   } else {
-    //     console.log("no");
-    //     return null;
-    //   }
-    // });
   }
-
-  // console.log(errors.emailRegisterError.type);
 
   return (
     <div className="w-[304px]">
@@ -229,22 +198,23 @@ export default function Register() {
   );
 }
 
-export async function action({ request }) {
-  console.log(request);
-  const data = await request.formData();
-  const cusData = {
-    user: {
-      email: data.get("email"),
-      nickname: data.get("name"),
-      password: data.get("password"),
-    },
-  };
+//因react-hook-form影響, 無法使用
+// export async function action({ request }) {
+//   console.log(request);
+//   const data = await request.formData();
+//   const cusData = {
+//     user: {
+//       email: data.get("email"),
+//       nickname: data.get("name"),
+//       password: data.get("password"),
+//     },
+//   };
 
-  return postUser(cusData).then((res) => {
-    if (res.ok) {
-      return redirect("/ONLINE-TODO-LIST/");
-    } else {
-      return null;
-    }
-  });
-}
+//   return postUser(cusData).then((res) => {
+//     if (res.ok) {
+//       return redirect("/ONLINE-TODO-LIST/");
+//     } else {
+//       return null;
+//     }
+//   });
+// }

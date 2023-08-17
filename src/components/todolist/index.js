@@ -3,7 +3,7 @@ import ToDoListContainer from "./ToDoListContainer";
 import Container from "../common/Container";
 import { Input } from "../common/FormInput";
 import plusBtn from "../../images/btn/plusBtn.png";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { addToDoListItem, getToDoList } from "../common/api";
 import coverPic2 from "../../images/cover/coverPic2.png";
 import { useLoaderData } from "react-router-dom";
@@ -96,6 +96,7 @@ export async function loader() {
   return { toDoListItem };
 }
 
+//適應不同title渲染
 export function renderSelectTitleItem(index, data) {
   let newData = {};
   if (index === 1) {

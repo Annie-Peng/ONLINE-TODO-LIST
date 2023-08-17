@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import CommonPage from "./CommonPage";
+import CommonPage from "./components/common/CommonPage";
 import ErrorPage from "./components/common/ErrorPage";
 import Register, { action as editRegister } from "./components/register";
 import ToDoList, { loader as todolistLoader } from "./components/todolist";
@@ -17,12 +17,12 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Login />,
-        action: editLogin,
+        // action: editLogin,
       },
       {
         path: "/ONLINE-TODO-LIST/register",
         element: <Register />,
-        action: editRegister,
+        // action: editRegister,
       },
     ],
   },
