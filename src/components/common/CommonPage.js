@@ -1,5 +1,5 @@
-import Cover from "./components/common/Cover.js";
-import Container from "./components/common/Container.js";
+import Cover from "./Cover.js";
+import Container from "./Container.js";
 import { Outlet } from "react-router-dom";
 
 export default function CommonPage() {

@@ -56,7 +56,7 @@ function ToDoListContent({
         };
         value.content
           ? patchToDoListItem(token, value.content, id)
-          : (value = deleteIdItem(token, id));
+          : (value = deleteIdItem(token, id)); //input空值渲染刪除
         return value;
       } else {
         return item;
@@ -75,10 +75,11 @@ function ToDoListContent({
     const checkTypeOfId = typeof id;
     let result;
     if (checkTypeOfId === "string") {
-      console.log("ys");
+      //點擊btn刪除單項目
       result = selectData.filter((item) => item.id !== id);
       deleteIdItem(token, id);
     } else {
+      //清除所有已完成項目
       result = selectData.filter((item) => !item["completed_at"]);
       const completedItems = selectData.filter((item) => item["completed_at"]);
       completedItems.forEach((item) => deleteIdItem(token, item.id));
@@ -86,52 +87,32 @@ function ToDoListContent({
     setSelectData(result);
   }
 
-  function handleCompleteClick(id) {
-    const result = Promise.all(
-      selectData.map(async (item) => {
-        if (item.id === id) {
-          const toggle = await completeToDoListItem(token, id);
-          // console.log(toggle);
-          return toggle;
-        } else {
-          return item;
-        }
-      })
-    );
-    result.then((newResult) => {
-      const nextNewResult = newResult.filter((item) => {
-        return isSelectTitleStyle !== 0 ? item.id !== id : item;
-      });
-      setSelectData(nextNewResult);
-    });
-  }
+  async function handleCompleteClick(id, index) {
+    const toggle = await completeToDoListItem(token, id);
+    const newSelectData = [
+      ...selectData.slice(0, index), // 前面的元素不變
+      toggle, // 替換指定索引的元素
+      ...selectData.slice(index + 1), // 後面的元素不變
+    ];
 
-  // async function handleCompleteClick(id) {
-  //   const result = await Promise.all(
-  //     selectData.map(async (item) => {
-  //       if (item.id === id) {
-  //         const toggle = await completeToDoListItem(token, id);
-  //         // console.log(toggle);
-  //         return toggle;
-  //       } else {
-  //         return item;
-  //       }
-  //     })
-  //   );
-  //   setselectData(result);
-  // }
+    //適應當下篩選渲染
+    const result = newSelectData.filter((item) => {
+      return isSelectTitleStyle !== 0 ? item.id !== id : item;
+    });
+    setSelectData(result);
+  }
 
   return (
     <div className="toDoListContent p-6 flex flex-col gap-y-4">
       <ul className="flex flex-col gap-y-4 relative">
-        {selectData.map((item) => (
+        {selectData.map((item, index) => (
           <Fragment key={item.id}>
             <li className="border-b border-line pb-4 flex text-sm relative">
               <span
                 className={
                   item["completed_at"] ? "vectorChecked" : "rectangleBox"
                 }
-                onClick={() => handleCompleteClick(item.id)}
+                onClick={() => handleCompleteClick(item.id, index)}
               ></span>
               <input
                 className="w-full"
@@ -174,9 +155,9 @@ export default function ToDoListContainer({
 
   async function handleRenderItemClick(index) {
     const result = await getToDoList(token);
-    console.log(token);
+    // console.log(token);
     const nextData = renderSelectTitleItem(index, result);
-    console.log(nextData);
+    // console.log(nextData);
     setIsSelectTitleStyle(index);
     setSelectData(nextData.todos);
   }
