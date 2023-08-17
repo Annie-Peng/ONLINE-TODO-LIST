@@ -12,6 +12,7 @@ export default function Register() {
     control,
     setError,
     watch,
+    clearErrors,
   } = useForm({
     defaultValues: {
       email: "",
@@ -36,16 +37,16 @@ export default function Register() {
     const res = await postUser(cusData);
     const jsonData = await res.json();
     const newData = jsonData.error;
-    newData.toString() === "電子信箱 已被使用" &&
-      setError("emailRegisterError", {
-        type: "422",
-        message: "電子信箱已經註冊",
-      });
 
     if (res.ok) {
       alert("註冊成功！請重新登入 ：）");
       return navigate("/ONLINE-TODO-LIST/");
     } else {
+      newData.toString() === "電子信箱 已被使用" &&
+        setError("emailRegisterError", {
+          type: "422",
+          message: "電子信箱已經註冊",
+        });
       return null;
     }
   }
@@ -71,7 +72,11 @@ export default function Register() {
                 content="Email"
                 name="email"
                 value={field.value}
-                onChange={field.onChange}
+                onChange={(e) => {
+                  field.onChange(e);
+                  errors.emailRegisterError &&
+                    clearErrors("emailRegisterError");
+                }}
                 onBlur={field.onBlur}
                 placeholder="請輸入Email"
                 type="email"

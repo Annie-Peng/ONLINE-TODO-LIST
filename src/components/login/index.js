@@ -11,6 +11,7 @@ export default function Login() {
     formState: { errors },
     control,
     setError,
+    clearErrors,
   } = useForm({
     defaultValues: {
       email: "",
@@ -32,6 +33,7 @@ export default function Login() {
 
     const res = await loginToDoList(cusData);
     const jsonData = await res.json();
+    const newData = jsonData.error;
 
     if (res.ok) {
       const token = res.headers.get("Authorization");
@@ -76,7 +78,10 @@ export default function Login() {
                 content="Email"
                 name="email"
                 value={field.value}
-                onChange={field.onChange}
+                onChange={(e) => {
+                  field.onChange(e);
+                  errors.emailLoginError && clearErrors("emailLoginError");
+                }}
                 onBlur={field.onBlur}
                 placeholder="請輸入Email"
                 type="email"
@@ -113,7 +118,11 @@ export default function Login() {
                 content="密碼"
                 name="password"
                 value={field.value}
-                onChange={field.onChange}
+                onChange={(e) => {
+                  field.onChange(e);
+                  errors.passwordLoginError &&
+                    clearErrors("passwordLoginError");
+                }}
                 onBlur={field.onBlur}
                 placeholder="請輸入密碼"
                 type="password"
