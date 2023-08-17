@@ -12,6 +12,7 @@ export default function Register() {
     control,
     setError,
     watch,
+    clearErrors,
   } = useForm({
     defaultValues: {
       email: "",
@@ -24,19 +25,6 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  // const onSubmit = async (data) => {
-  //   const response = await postUser(data);
-  //   const jsonData = await response.json();
-  //   console.log(jsonData);
-  //   if (response.status > 200) {
-  //     setError("errorType", {
-  //       type: response.status,
-  //       message: jsonData.message,
-  //     });
-  //   }
-  // };
-  // console.log(errors.errorType);
-
   async function onSubmit(data) {
     const cusData = {
       user: {
@@ -45,18 +33,22 @@ export default function Register() {
         password: data.password,
       },
     };
-    console.log(cusData);
 
-    await postUser(cusData).then((res) => {
-      console.log(res);
-      if (res.ok) {
-        console.log("yes");
-        return navigate("/ONLINE-TODO-LIST/");
-      } else {
-        console.log("no");
-        return null;
-      }
-    });
+    const res = await postUser(cusData);
+    const jsonData = await res.json();
+    const newData = jsonData.error;
+
+    if (res.ok) {
+      alert("註冊成功！請重新登入 ：）");
+      return navigate("/ONLINE-TODO-LIST/");
+    } else {
+      newData.toString() === "電子信箱 已被使用" &&
+        setError("emailRegisterError", {
+          type: "422",
+          message: "電子信箱已經註冊",
+        });
+      return null;
+    }
   }
 
   return (
@@ -80,7 +72,11 @@ export default function Register() {
                 content="Email"
                 name="email"
                 value={field.value}
-                onChange={field.onChange}
+                onChange={(e) => {
+                  field.onChange(e);
+                  errors.emailRegisterError &&
+                    clearErrors("emailRegisterError");
+                }}
                 onBlur={field.onBlur}
                 placeholder="請輸入Email"
                 type="email"
@@ -97,6 +93,11 @@ export default function Register() {
                   ))
                 }
               />
+              {errors.emailRegisterError && (
+                <p className="text-warning text-sm font-bold">
+                  {errors.emailRegisterError.message}
+                </p>
+              )}
             </>
           )}
         />
@@ -202,22 +203,23 @@ export default function Register() {
   );
 }
 
-export async function action({ request }) {
-  console.log(request);
-  const data = await request.formData();
-  const cusData = {
-    user: {
-      email: data.get("email"),
-      nickname: data.get("name"),
-      password: data.get("password"),
-    },
-  };
+//因react-hook-form影響, 無法使用
+// export async function action({ request }) {
+//   console.log(request);
+//   const data = await request.formData();
+//   const cusData = {
+//     user: {
+//       email: data.get("email"),
+//       nickname: data.get("name"),
+//       password: data.get("password"),
+//     },
+//   };
 
-  return postUser(cusData).then((res) => {
-    if (res.ok) {
-      return redirect("/ONLINE-TODO-LIST/");
-    } else {
-      return null;
-    }
-  });
-}
+//   return postUser(cusData).then((res) => {
+//     if (res.ok) {
+//       return redirect("/ONLINE-TODO-LIST/");
+//     } else {
+//       return null;
+//     }
+//   });
+// }
