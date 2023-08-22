@@ -1,34 +1,51 @@
 const URL = "https://todoo.5xcamp.us/";
 
 //得到項目
-export function getToDoList(token) {
-  return fetch(`${URL}todos`, {
-    method: "GET",
-    headers: {
-      Authorization: token,
-    },
-  })
-    .then((res) => res.json())
-    .then((result) => {
-      console.log(result);
-      return result;
+export async function getToDoList(token) {
+  try {
+    const res = await fetch(`${URL}todos`, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
     });
+    const jsonData = await res.json();
+    if (!res.ok) {
+      throw Error("Could not fetch project");
+    }
+    return jsonData;
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 //新增項目
-export function addToDoListItem(token, value) {
-  return fetch(`${URL}todos`, {
-    method: "POST",
-    body: JSON.stringify({
-      todo: {
-        content: value,
+export async function addToDoListItem(token, value) {
+  try {
+    const res = await fetch(`${URL}todos`, {
+      method: "POST",
+      body: JSON.stringify({
+        todo: {
+          content: value,
+        },
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
       },
-    }),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token,
-    },
-  });
+    });
+    const jsonData = await res.json();
+    if (res.status === 422) {
+      return new Response("新增項目不得為空", { status: 422 });
+    }
+    if (res.status === 400) {
+      throw Error("Not Found");
+    }
+    return jsonData;
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
 }
 
 //刪除項目
