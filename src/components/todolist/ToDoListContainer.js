@@ -6,7 +6,6 @@ import {
   getToDoList,
 } from "../common/api";
 import { renderSelectTitleItem } from "./index";
-import { useNavigate } from "react-router-dom";
 
 const titleList = ["全部", "待完成", "已完成"];
 
@@ -55,7 +54,6 @@ function ToDoListContent({
   newRenderData,
   setNewRenderData,
 }) {
-  const navigate = useNavigate();
   const [renderUncompleteNum, setRenderUncompleteNum] = useState(itemLists);
 
   useEffect(() => {
@@ -66,12 +64,16 @@ function ToDoListContent({
   }, [itemLists]);
 
   function handleChange(e, id) {
-    e.target.value
-      ? patchToDoListItem(token, e.target.value, id)
-      : deleteIdItem(token, id); //input空值渲染刪除
+    if (e.target.value) {
+      const patchResult = patchToDoListItem(token, e.target.value, id);
+      if (!patchResult) return;
+    } else {
+      const deleteResult = deleteToDoListItem(token, id); //input空值渲染刪除
+      if (!deleteResult) return;
+    }
 
     const result = {
-      todos: itemLists.map((item) =>
+      todos: newRenderData.map((item) =>
         item.id === id ? { ...item, content: e.target.value } : item
       ),
     };
@@ -83,24 +85,18 @@ function ToDoListContent({
     setNewRenderData(newResult);
   }
 
-  function deleteIdItem(token, id) {
-    deleteToDoListItem(token, id);
-    return { id: false };
-  }
-
   function handleDeleteClick(id) {
     const checkTypeOfId = typeof id;
     let result;
     if (checkTypeOfId === "string") {
       //點擊btn刪除單項目
-      console.log(itemLists);
+      if (!deleteToDoListItem(token, id)) return;
       result = itemLists.filter((item) => item.id !== id);
-      deleteIdItem(token, id);
     } else {
       //清除所有已完成項目
       result = newRenderData.filter((item) => !item["completed_at"]);
       const completedItems = itemLists.filter((item) => item["completed_at"]);
-      completedItems.forEach((item) => deleteIdItem(token, item.id));
+      completedItems.forEach((item) => deleteToDoListItem(token, item.id));
     }
     setNewData(itemLists.filter((item) => !item["completed_at"]));
     setNewRenderData(result);
@@ -108,6 +104,7 @@ function ToDoListContent({
 
   async function handleCompleteClick(id, index) {
     const toggle = await completeToDoListItem(token, id);
+    if (!toggle) return;
     const newSelectData = [
       ...newRenderData.slice(0, index), // 前面的元素不變
       toggle, // 替換指定索引的元素
@@ -171,8 +168,6 @@ export default function ToDoListContainer({
   newRenderData,
   setNewRenderData,
 }) {
-  // console.log("第二層", selectData);
-
   return (
     <div className="w-[500px] mt-4 bg-white rounded-[10px] shadow-[0_0_15px_0] shadow-tertiary mx-auto">
       <ToDoListTitle
