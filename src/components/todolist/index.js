@@ -8,30 +8,8 @@ import { addToDoListItem, getToDoList } from "../common/api";
 import coverPic2 from "../../images/cover/coverPic2.png";
 import { useLoaderData, useNavigate } from "react-router-dom";
 
-function AddItem({ onClick, onChange, newItem }) {
-  return (
-    <div className="mt-10 w-[500px] mx-auto flex shadow-[0_0_15px_0] shadow-tertiary rounded-[10px] h-[48px]">
-      <Input
-        name="addToDoList"
-        value={newItem}
-        placeholder="新增代辦事項"
-        onChange={onChange}
-      />
-      <button className="w-10 -ms-11" onClick={onClick}>
-        <img src={plusBtn} className="w-full" />
-      </button>
-    </div>
-  );
-}
-
-export default function ToDoList() {
-  const { toDoListItem } = useLoaderData();
-  const token = localStorage.getItem("user-token");
-  const userName = localStorage.getItem("user-name");
-  const [newData, setNewData] = useState(toDoListItem);
+function AddItem({ token, isSelectTitleStyle, setNewData, setNewRenderData }) {
   const [newItem, setNewItem] = useState("");
-  const [isSelectTitleStyle, setIsSelectTitleStyle] = useState(0);
-
   const navigate = useNavigate();
 
   async function handleClick() {
@@ -51,13 +29,39 @@ export default function ToDoList() {
     const getResult = await getToDoList(token);
 
     const nextData = renderSelectTitleItem(isSelectTitleStyle, getResult);
-    setNewData(nextData);
+    setNewData(getResult.todos);
+    setNewRenderData(nextData.todos);
     setNewItem("");
   }
 
   function handleChange(e) {
     setNewItem(e.target.value);
   }
+
+  return (
+    <div className="mt-10 w-[500px] mx-auto flex shadow-[0_0_15px_0] shadow-tertiary rounded-[10px] h-[48px]">
+      <Input
+        name="addToDoList"
+        value={newItem}
+        placeholder="新增代辦事項"
+        onChange={handleChange}
+      />
+      <button className="w-10 -ms-11" onClick={handleClick}>
+        <img src={plusBtn} className="w-full" />
+      </button>
+    </div>
+  );
+}
+
+export default function ToDoList() {
+  const { toDoListItem } = useLoaderData();
+  const token = localStorage.getItem("user-token");
+  const userName = localStorage.getItem("user-name");
+  const [newData, setNewData] = useState(toDoListItem.todos);
+  const [isSelectTitleStyle, setIsSelectTitleStyle] = useState(0);
+  const [newRenderData, setNewRenderData] = useState(toDoListItem.todos);
+
+  // console.log("第一層", newRenderData, newData);
 
   return (
     <section
@@ -69,16 +73,21 @@ export default function ToDoList() {
       <Container>
         <Header userName={userName} token={token} />
         <AddItem
-          onClick={handleClick}
-          onChange={handleChange}
-          newItem={newItem}
+          token={token}
+          setNewData={setNewData}
+          isSelectTitleStyle={isSelectTitleStyle}
+          newRenderData={newRenderData}
+          setNewRenderData={setNewRenderData}
         />
-        {newData.todos.length ? (
+        {newData.length ? (
           <ToDoListContainer
-            itemLists={newData.todos}
+            itemLists={newData}
             token={token}
             isSelectTitleStyle={isSelectTitleStyle}
             setIsSelectTitleStyle={setIsSelectTitleStyle}
+            setNewData={setNewData}
+            newRenderData={newRenderData}
+            setNewRenderData={setNewRenderData}
           />
         ) : (
           <ToDoListEmpty />
@@ -110,7 +119,6 @@ export function renderSelectTitleItem(index, data) {
   let newData = {};
   if (index === 1) {
     newData["todos"] = data["todos"].filter((item) => !item["completed_at"]);
-    console.log(newData);
   } else if (index === 2) {
     newData["todos"] = data["todos"].filter((item) => item["completed_at"]);
   } else {
