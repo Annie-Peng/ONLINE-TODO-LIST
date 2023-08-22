@@ -49,34 +49,50 @@ export async function addToDoListItem(token, value) {
 }
 
 //刪除項目
-export function deleteToDoListItem(token, id) {
-  fetch(`${URL}todos/${id}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token,
-    },
-  })
-    .then((res) => res.json())
-    .then((result) => console.log(result));
+export async function deleteToDoListItem(token, id) {
+  try {
+    const res = await fetch(`${URL}todos/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    });
+    const jsonData = await res.json();
+    if (!res.ok) {
+      throw Error("Could not fetch project");
+    }
+    return { id: false };
+  } catch (err) {
+    console.log(err);
+    alert("刪除項目失敗，請聯絡系統管理員");
+  }
 }
 
 //修改項目
-export function patchToDoListItem(token, value, id) {
-  fetch(`${URL}todos/${id}`, {
-    method: "PATCH",
-    body: JSON.stringify({
-      todo: {
-        content: value,
+export async function patchToDoListItem(token, value, id) {
+  try {
+    const res = await fetch(`${URL}todos/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        todo: {
+          content: value,
+        },
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
       },
-    }),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token,
-    },
-  })
-    .then((res) => res.json())
-    .then((result) => console.log(result));
+    });
+    const jsonData = await res.json();
+    if (!res.ok) {
+      throw Error("Could not fetch project");
+    }
+    return jsonData;
+  } catch (err) {
+    console.log(err);
+    alert("更新項目失敗，請聯絡系統管理員");
+  }
 }
 
 //註冊帳號
@@ -91,19 +107,25 @@ export function postUser(value) {
 }
 
 //完成項目
-export function completeToDoListItem(token, id) {
-  return fetch(`${URL}todos/${id}/toggle`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token,
-    },
-  })
-    .then((res) => res.json())
-    .then((result) => {
-      console.log(result);
-      return result;
+export async function completeToDoListItem(token, id) {
+  try {
+    const res = await fetch(`${URL}todos/${id}/toggle`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
     });
+    const jsonData = await res.json();
+    console.log(jsonData);
+    if (!res.ok) {
+      throw Error("Could not fetch project");
+    }
+    return jsonData;
+  } catch (err) {
+    console.log(err);
+    alert("切換完成項目失敗，請聯絡系統管理員");
+  }
 }
 
 //登入帳號
