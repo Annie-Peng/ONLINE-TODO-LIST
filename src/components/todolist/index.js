@@ -6,7 +6,7 @@ import plusBtn from "../../images/btn/plusBtn.png";
 import { useState } from "react";
 import { addToDoListItem, getToDoList } from "../common/api";
 import coverPic2 from "../../images/cover/coverPic2.png";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 
 function AddItem({ onClick, onChange, newItem }) {
   return (
@@ -14,7 +14,7 @@ function AddItem({ onClick, onChange, newItem }) {
       <Input
         name="addToDoList"
         value={newItem}
-        showContent="新增代辦事項"
+        placeholder="新增代辦事項"
         onChange={onChange}
       />
       <button className="w-10 -ms-11" onClick={onClick}>
@@ -32,16 +32,25 @@ export default function ToDoList() {
   const [newItem, setNewItem] = useState("");
   const [isSelectTitleStyle, setIsSelectTitleStyle] = useState(0);
 
+  const navigate = useNavigate();
+
   async function handleClick() {
-    await addToDoListItem(token, newItem);
-    const res = await fetch(`https://todoo.5xcamp.us/todos`, {
-      method: "GET",
-      headers: {
-        Authorization: token,
-      },
-    });
-    const data = await res.json();
-    const nextData = renderSelectTitleItem(isSelectTitleStyle, data);
+    const postResult = await addToDoListItem(token, newItem);
+
+    if (postResult.status) {
+      //設定錯誤訊息渲染
+      const jasonPostResult = await postResult.text();
+      return alert(jasonPostResult);
+    }
+
+    if (postResult.message) {
+      //設定catch跳轉畫面
+      return navigate("/ONLINE-TODO-LIST/error/");
+    }
+
+    const getResult = await getToDoList(token);
+
+    const nextData = renderSelectTitleItem(isSelectTitleStyle, getResult);
     setNewData(nextData);
     setNewItem("");
   }

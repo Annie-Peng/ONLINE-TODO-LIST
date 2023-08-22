@@ -29,7 +29,12 @@ const router = createBrowserRouter([
   {
     path: "/ONLINE-TODO-LIST/todolist",
     element: <ToDoList />,
+    errorElement: <ErrorPage />,
     loader: todolistLoader,
+  },
+  {
+    path: "/ONLINE-TODO-LIST/error",
+    element: <ErrorPage />,
   },
 ]);
 
