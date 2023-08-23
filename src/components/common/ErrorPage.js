@@ -10,9 +10,7 @@ export default function ErrorPage() {
     >
       <h1 className="text-6xl leading-[80px]">Oops!</h1>
       <p>Sorry, an unexpected error has occurred.</p>
-      <p>
-        <i>{error.statusText || error.message}</i>
-      </p>
+      <p></p>
       <h2 className="text-4xl">
         <Link to={"/ONLINE-TODO-LIST/"}>
           <button className="block mx-auto mt-6 px-12 py-3 text-white bg-secondary rounded-[10px]">

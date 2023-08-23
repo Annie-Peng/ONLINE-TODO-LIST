@@ -14,19 +14,14 @@ function AddItem({ token, isSelectTitleStyle, setNewData, setNewRenderData }) {
 
   async function handleClick() {
     const postResult = await addToDoListItem(token, newItem);
-
-    if (postResult.status) {
-      //設定錯誤訊息渲染
-      const jasonPostResult = await postResult.text();
-      return alert(jasonPostResult);
-    }
-
-    if (postResult.message) {
-      //設定catch跳轉畫面
+    if (!postResult) {
       return navigate("/ONLINE-TODO-LIST/error/");
     }
 
     const getResult = await getToDoList(token);
+    if (!getResult) {
+      return navigate("/ONLINE-TODO-LIST/error/");
+    }
 
     const nextData = renderSelectTitleItem(isSelectTitleStyle, getResult);
     setNewData(getResult.todos);
@@ -111,6 +106,7 @@ function ToDoListEmpty() {
 export async function loader() {
   const token = localStorage.getItem("user-token");
   const toDoListItem = await getToDoList(token);
+  if (!toDoListItem) return;
   return { toDoListItem };
 }
 
