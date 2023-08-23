@@ -1,6 +1,6 @@
 import MainBtn from "../common/MainBtn.js";
 import FormInput from "../common/FormInput.js";
-import { Link, redirect, Form, useNavigate } from "react-router-dom";
+import { Link, Form, useNavigate } from "react-router-dom";
 import { postUser } from "../common/api.js";
 import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
@@ -38,6 +38,11 @@ export default function Register() {
     const jsonData = await res.json();
     const newData = jsonData.error;
 
+    if (res.ok) {
+      alert("註冊成功！請重新登入 ：）");
+      return navigate("/ONLINE-TODO-LIST/");
+    }
+
     if (res.status === 422) {
       newData.toString() === "電子信箱 已被使用" &&
         setError("emailRegisterError", {
@@ -47,14 +52,6 @@ export default function Register() {
     } else {
       alert("註冊失敗，請聯絡系統管理員");
       return navigate("/ONLINE-TODO-LIST/error");
-    }
-
-    if (!res.ok) {
-      alert("註冊失敗，請聯絡系統管理員");
-      return navigate("/ONLINE-TODO-LIST/error");
-    } else {
-      alert("註冊成功！請重新登入 ：）");
-      return navigate("/ONLINE-TODO-LIST/");
     }
   }
 
@@ -209,24 +206,3 @@ export default function Register() {
     </div>
   );
 }
-
-//因react-hook-form影響, 無法使用
-// export async function action({ request }) {
-//   console.log(request);
-//   const data = await request.formData();
-//   const cusData = {
-//     user: {
-//       email: data.get("email"),
-//       nickname: data.get("name"),
-//       password: data.get("password"),
-//     },
-//   };
-
-//   return postUser(cusData).then((res) => {
-//     if (res.ok) {
-//       return redirect("/ONLINE-TODO-LIST/");
-//     } else {
-//       return null;
-//     }
-//   });
-// }
