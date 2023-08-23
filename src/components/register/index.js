@@ -38,16 +38,23 @@ export default function Register() {
     const jsonData = await res.json();
     const newData = jsonData.error;
 
-    if (res.ok) {
-      alert("註冊成功！請重新登入 ：）");
-      return navigate("/ONLINE-TODO-LIST/");
-    } else {
+    if (res.status === 422) {
       newData.toString() === "電子信箱 已被使用" &&
         setError("emailRegisterError", {
           type: "422",
           message: "電子信箱已經註冊",
         });
-      return null;
+    } else {
+      alert("註冊失敗，請聯絡系統管理員");
+      return navigate("/ONLINE-TODO-LIST/error");
+    }
+
+    if (!res.ok) {
+      alert("註冊失敗，請聯絡系統管理員");
+      return navigate("/ONLINE-TODO-LIST/error");
+    } else {
+      alert("註冊成功！請重新登入 ：）");
+      return navigate("/ONLINE-TODO-LIST/");
     }
   }
 
