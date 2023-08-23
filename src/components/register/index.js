@@ -1,6 +1,6 @@
 import MainBtn from "../common/MainBtn.js";
 import FormInput from "../common/FormInput.js";
-import { Link, redirect, Form, useNavigate } from "react-router-dom";
+import { Link, Form, useNavigate } from "react-router-dom";
 import { postUser } from "../common/api.js";
 import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
@@ -206,24 +206,3 @@ export default function Register() {
     </div>
   );
 }
-
-//因react-hook-form影響, 無法使用
-// export async function action({ request }) {
-//   console.log(request);
-//   const data = await request.formData();
-//   const cusData = {
-//     user: {
-//       email: data.get("email"),
-//       nickname: data.get("name"),
-//       password: data.get("password"),
-//     },
-//   };
-
-//   return postUser(cusData).then((res) => {
-//     if (res.ok) {
-//       return redirect("/ONLINE-TODO-LIST/");
-//     } else {
-//       return null;
-//     }
-//   });
-// }

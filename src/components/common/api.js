@@ -15,7 +15,6 @@ export async function getToDoList(token) {
     }
     return jsonData;
   } catch (err) {
-    console.log(err);
     alert("讀取失敗，請聯絡系統管理員");
   }
 }
@@ -47,7 +46,6 @@ export async function addToDoListItem(token, value) {
     }
     return jsonData;
   } catch (err) {
-    console.log(err);
     alert("新增項目失敗，請聯絡系統管理員");
   }
 }
@@ -68,7 +66,6 @@ export async function deleteToDoListItem(token, id) {
     }
     return jsonData;
   } catch (err) {
-    console.log(err);
     alert("刪除項目失敗，請聯絡系統管理員");
   }
 }
@@ -94,7 +91,6 @@ export async function patchToDoListItem(token, value, id) {
     }
     return jsonData;
   } catch (err) {
-    console.log(err);
     alert("更新項目失敗，請聯絡系統管理員");
   }
 }
@@ -121,13 +117,11 @@ export async function completeToDoListItem(token, id) {
       },
     });
     const jsonData = await res.json();
-    console.log(jsonData);
     if (!res.ok) {
       throw Error("Could not fetch project");
     }
     return jsonData;
   } catch (err) {
-    console.log(err);
     alert("切換完成項目失敗，請聯絡系統管理員");
   }
 }
@@ -156,7 +150,6 @@ export async function logoutToDoList(token) {
     }
     return jsonData;
   } catch (err) {
-    console.log(err);
     alert("登出失敗，請聯絡系統管理員");
   }
 }
