@@ -56,8 +56,6 @@ export default function ToDoList() {
   const [isSelectTitleStyle, setIsSelectTitleStyle] = useState(0);
   const [newRenderData, setNewRenderData] = useState(toDoListItem.todos);
 
-  // console.log("第一層", newRenderData, newData);
-
   return (
     <section
       style={{
