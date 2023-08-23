@@ -32,8 +32,11 @@ export default function Login() {
     };
 
     const res = await loginToDoList(cusData);
+    if (res.status === 404) {
+      alert("登入失敗，請聯絡系統管理員");
+      return;
+    }
     const jsonData = await res.json();
-    const newData = jsonData.error;
 
     if (res.ok) {
       const token = res.headers.get("Authorization");

@@ -85,21 +85,30 @@ function ToDoListContent({
     setNewRenderData(newResult);
   }
 
-  function handleDeleteClick(id) {
+  async function handleDeleteClick(id) {
     const checkTypeOfId = typeof id;
-    let result;
+    let itemListsResult;
+    let renderResult;
+    let deleteResult;
+
     if (checkTypeOfId === "string") {
       //點擊btn刪除單項目
-      if (!deleteToDoListItem(token, id)) return;
-      result = itemLists.filter((item) => item.id !== id);
+      deleteResult = await deleteToDoListItem(token, id);
+      if (!deleteResult) return;
+      renderResult = newRenderData.filter((item) => item.id !== id);
+      itemListsResult = itemLists.filter((item) => item.id !== id);
     } else {
       //清除所有已完成項目
-      result = newRenderData.filter((item) => !item["completed_at"]);
-      const completedItems = itemLists.filter((item) => item["completed_at"]);
-      completedItems.forEach((item) => deleteToDoListItem(token, item.id));
+      deleteResult = itemLists.filter(
+        (item) => item["completed_at"] && deleteToDoListItem(token, item.id)
+      );
+      if (!deleteResult) return;
+      renderResult = newRenderData.filter((item) => !item["completed_at"]);
+      itemListsResult = itemLists.filter((item) => !item["completed_at"]);
     }
-    setNewData(itemLists.filter((item) => !item["completed_at"]));
-    setNewRenderData(result);
+
+    setNewData(itemListsResult);
+    setNewRenderData(renderResult);
   }
 
   async function handleCompleteClick(id, index) {
